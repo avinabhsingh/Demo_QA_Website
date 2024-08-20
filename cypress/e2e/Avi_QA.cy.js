@@ -1,3 +1,5 @@
+// All pageobjects files are imported initially
+import functions from "../pageObjects/functions";
 import textbox from "../pageObjects/Elements/Textbox";
 import checkbox from "../pageObjects/Elements/Checkbox";
 import radiobutton from "../pageObjects/Elements/Radiobutton";
@@ -31,29 +33,15 @@ import login from "../pageObjects/Book Store Application/Login";
 import register from "../pageObjects/Book Store Application/Register";
 import profile from "../pageObjects/Book Store Application/Profile";
 
-//function to not fail testcase when uncaught exceptions are generated
+// Inbuilt function is set to not fail testcase when uncaught exceptions are generated
 Cypress.on("uncaught:exception", (err, runnable) => {
   return false;
 });
 
-//function to block add
-function ignore_ad() {
-  cy.intercept("GET", "https://oajs.openx.net/**", (req) => {
-    // Return a response object with status 500 to indicate the request was blocked
-    req.reply({
-      status: 500,
-      body: "Blocked by Cypress",
-      headers: {
-        "cypress-blocked": "true",
-      },
-    });
-  });
-}
-
 describe("DemoQA -> Text Box", () => {
   beforeEach(() => {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -123,7 +111,7 @@ describe("DemoQA -> Text Box", () => {
 describe("DemoQA -> Check Box", () => {
   beforeEach(() => {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -218,7 +206,7 @@ describe("DemoQA -> Check Box", () => {
 describe("DemoQA -> Radio Button", () => {
   beforeEach(() => {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -280,7 +268,7 @@ describe("DemoQA -> Radio Button", () => {
 describe("DemoQA -> Web Tables", () => {
   beforeEach(() => {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -654,7 +642,7 @@ describe("DemoQA -> Web Tables", () => {
 describe("DemoQA -> Buttons", () => {
   beforeEach(() => {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -703,7 +691,7 @@ describe("DemoQA -> Buttons", () => {
 describe("DemoQA -> Links", () => {
   beforeEach(() => {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -895,7 +883,7 @@ describe("DemoQA -> Links", () => {
 describe("DemoQA -> Broken Links & Images", () => {
   beforeEach(() => {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -947,7 +935,7 @@ describe("DemoQA -> Broken Links & Images", () => {
 describe("Tools QA -> Upload and Download", () => {
   beforeEach(() => {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -1001,7 +989,7 @@ describe("Tools QA -> Upload and Download", () => {
 describe("Demo QA -> Dynamic Properties", () => {
   beforeEach(() => {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -1060,7 +1048,7 @@ describe("Demo QA -> Dynamic Properties", () => {
 describe("Demo QA -> Forms", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -1249,7 +1237,7 @@ describe("Demo QA -> Forms", () => {
 describe("Demo QA -> Browser Windows", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -1316,7 +1304,7 @@ describe("Demo QA -> Browser Windows", () => {
 describe("Demo QA -> Alerts", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -1449,7 +1437,7 @@ describe("Demo QA -> Alerts", () => {
 describe("Demo QA -> Frames", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -1513,7 +1501,7 @@ describe("Demo QA -> Frames", () => {
 describe("Demo QA -> Nested Frames", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -1564,7 +1552,7 @@ describe("Demo QA -> Nested Frames", () => {
 describe("Demo QA -> Modal Dialogs", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -1634,7 +1622,7 @@ describe("Demo QA -> Modal Dialogs", () => {
 describe("Demo QA -> Accordian", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -1710,7 +1698,7 @@ describe("Demo QA -> Accordian", () => {
 describe("Demo QA -> Auto Complete", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -1795,7 +1783,7 @@ describe("Demo QA -> Auto Complete", () => {
 describe("Demo QA -> Date Picker", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -1875,7 +1863,7 @@ describe("Demo QA -> Date Picker", () => {
 describe("Demo QA -> Slider", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -1923,7 +1911,7 @@ describe("Demo QA -> Slider", () => {
 describe("Demo QA -> Progress Bar", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -2024,7 +2012,7 @@ describe("Demo QA -> Progress Bar", () => {
 describe("Demo QA -> Tabs", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -2083,7 +2071,7 @@ describe("Demo QA -> Tabs", () => {
 describe("Demo QA -> Tool Tips", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -2169,7 +2157,7 @@ describe("Demo QA -> Tool Tips", () => {
 describe("Demo QA -> Menu", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -2207,7 +2195,7 @@ describe("Demo QA -> Menu", () => {
 describe("Demo QA -> Select Menu", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -2340,7 +2328,7 @@ describe("Demo QA -> Select Menu", () => {
 describe("Demo QA -> Sortable", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -2443,7 +2431,7 @@ describe("Demo QA -> Sortable", () => {
 describe("Demo QA -> Selectable", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -2520,7 +2508,7 @@ describe("Demo QA -> Selectable", () => {
 describe("Demo QA -> Resizable", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -2607,7 +2595,7 @@ describe("Demo QA -> Resizable", () => {
 describe("Demo QA -> Droppable", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -2799,7 +2787,7 @@ describe("Demo QA -> Droppable", () => {
 describe("Demo QA -> Dragabble", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -3110,7 +3098,7 @@ describe("Demo QA -> Dragabble", () => {
 describe("Demo QA -> Book Store Application (Register)", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
@@ -3323,7 +3311,7 @@ describe("Demo QA -> Book Store Application (Register)", () => {
 describe("Demo QA -> Book Store Application (Login)", () => {
   beforeEach(function () {
     //call to ignore_ad function
-    ignore_ad();
+    functions.ignore_ad();
 
     //Set screen size
     cy.viewport(1920, 1080);
