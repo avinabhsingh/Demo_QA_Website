@@ -1,0 +1,14 @@
+{
+  "name": "tools_qa_website",
+  "version": "1.0.0",
+  "description": "A dummy website to practice automation testing.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "avinabh",
+  "license": "ISC",
+  "devDependencies": {
+    "cypress": "^13.13.3"
+  }
+}
