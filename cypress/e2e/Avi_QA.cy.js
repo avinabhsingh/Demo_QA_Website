@@ -39,7 +39,7 @@ Cypress.on("uncaught:exception", (err, runnable) => {
 });
 
 // Global beforeEach block to apply to all describe blocks in this file
-beforeEach(() => {
+beforeEach(function () {
   // Call a custom function to ignore ads
   functions.ignore_ad();
 
@@ -53,7 +53,7 @@ beforeEach(() => {
 // Describing the test suite for Text Box functionality
 describe("Text Box Functionality", function () {
   // Hook to run before each test in this suite
-  beforeEach(() => {
+  beforeEach(function () {
     // Click on the ELEMENTS section to expand the menu
     textbox.elements.elements_label().should("be.visible").click();
 
@@ -118,7 +118,7 @@ describe("Text Box Functionality", function () {
 // Describing the test suite for Check Box functionality
 describe("Check Box Functionality", function () {
   // Hook to run before each test in this suite
-  beforeEach(() => {
+  beforeEach(function () {
     // Click on the ELEMENTS section to expand the menu
     textbox.elements.elements_label().should("be.visible").click();
 
@@ -201,7 +201,7 @@ describe("Check Box Functionality", function () {
 // Describing the test suite for Radio Button functionality
 describe("Radio Button Functionality", function () {
   // Hook to run before each test in this suite
-  beforeEach(() => {
+  beforeEach(function () {
     // Click on the ELEMENTS section
     textbox.elements.elements_label().should("be.visible").click();
 
@@ -256,7 +256,7 @@ describe("Radio Button Functionality", function () {
 // Describing the test suite for Web Tables functionality
 describe("Web Tables Functionality", function () {
   // Describing the test suite for Text Box functionality
-  beforeEach(() => {
+  beforeEach(function () {
     // Click on the ELEMENTS section
     textbox.elements.elements_label().should("be.visible").click();
 
@@ -613,7 +613,7 @@ describe("Web Tables Functionality", function () {
 // Describing the test suite for Button functionality
 describe("Buttons Functionality", function () {
   // Hook to run before each test in this suite
-  beforeEach(() => {
+  beforeEach(function () {
     // Click on the ELEMENTS section in the sidebar
     textbox.elements.elements_label().should("be.visible").click();
 
@@ -655,7 +655,7 @@ describe("Buttons Functionality", function () {
 // Describing the test suite for Links functionality
 describe("Links Functionality", function () {
   // Hook to run before each test in this suite
-  beforeEach(() => {
+  beforeEach(function () {
     // Click on the ELEMENTS section in the sidebar
     textbox.elements.elements_label().should("be.visible").click();
 
@@ -845,7 +845,7 @@ describe("Links Functionality", function () {
 // Describing the test suite for Images functionality
 describe("Broken Links & Images Functionality", function () {
   // Hook to run before each test in this suite
-  beforeEach(() => {
+  beforeEach(function () {
     // Click on the ELEMENTS section in the sidebar
     textbox.elements.elements_label().should("be.visible").click();
 
@@ -889,7 +889,7 @@ describe("Broken Links & Images Functionality", function () {
 // Describing the test suite for Upload and Download functionality
 describe("Upload and Download Functionality", function () {
   // Hook to run before each test in this suite
-  beforeEach(() => {
+  beforeEach(function () {
     // Click on the ELEMENTS section in the sidebar
     textbox.elements.elements_label().should("be.visible").click();
 
@@ -936,7 +936,7 @@ describe("Upload and Download Functionality", function () {
 // Describing the test suite for Dynamic Properties functionality
 describe("Dynamic Properties Functionality", function () {
   // Hook to run before each test in this suite
-  beforeEach(() => {
+  beforeEach(function () {
     // Click on the ELEMENTS section in the sidebar
     textbox.elements.elements_label().should("be.visible").click();
 
@@ -988,7 +988,7 @@ describe("Dynamic Properties Functionality", function () {
 // Describing the test suite for Forms functionality
 describe("Forms Functionality", function () {
   // Hook to run before each test in this suite
-  beforeEach(() => {
+  beforeEach(function () {
     // Click on the FORM section in the sidebar
     practice_form.elements.form_label().should("be.visible").click();
 
@@ -1158,7 +1158,7 @@ describe("Forms Functionality", function () {
 // Describing the test suite for Browser Windows functionality
 describe("Browser Windows Functionality", function () {
   // Hook to run before each test in this suite
-  beforeEach(() => {
+  beforeEach(function () {
     // Click on the "Alerts, Frame & Windows" section to navigate
     browserwindows.elements.alertsframewindows().should("be.visible").click();
 
@@ -1408,7 +1408,7 @@ describe("Nested Frames", function () {
 });
 
 // Describing the test suite for Modal Dialogs functionality
-describe("Modal Dialogs Functionality", () => {
+describe("Modal Dialogs Functionality", function () {
   // Hook to run before each test in this suite
   beforeEach(function () {
     // Click on the "Alerts, Frame & Windows" section to navigate
@@ -1471,7 +1471,7 @@ describe("Modal Dialogs Functionality", () => {
 ///////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Describing the test suite for Accordian functionality
-describe("Accordian Functionality", () => {
+describe("Accordian Functionality", function () {
   // Hook to run before each test in this suite
   beforeEach(function () {
     // Click on the "Widgets" section to navigate
@@ -1546,7 +1546,7 @@ describe("Accordian Functionality", () => {
 });
 
 // Describing the test suite for Auto Complete functionality
-describe("Auto Complete Functionality", () => {
+describe("Auto Complete Functionality", function () {
   // Hook to run before each test in this suite
   beforeEach(function () {
     // Click on the "Widgets" section to navigate
@@ -2805,7 +2805,7 @@ describe("Draggable Functionality", function () {
 /////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 // Describing the test suite for Register functionality
-describe("Book Store Application -> Register Functionality", () => {
+describe("Book Store Application -> Register Functionality", function () {
   // Hook to run before each test in this suite
   beforeEach(function () {
     // Click on the "Book Store Application" section to navigate to the Book Store page
