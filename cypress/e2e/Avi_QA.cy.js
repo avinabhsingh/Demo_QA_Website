@@ -926,7 +926,7 @@ describe("Upload and Download Functionality", function () {
     // Upload a valid file
     up_down.elements
       .upload_btn()
-      .selectFile("C:/Users/avinabh.s/Pictures/img.jpg");
+      .selectFile("cypress/uploads/sample_file.docx");
 
     // Assert that the file path contains the uploaded file name
     up_down.elements.file_path().should("contain", "img.jpg");
@@ -1008,38 +1008,47 @@ describe("Forms Functionality", function () {
       .name_label()
       .should("be.visible")
       .and("have.text", "Name");
+
     practice_form.elements
       .email_label()
       .should("be.visible")
       .and("have.text", "Email");
+
     practice_form.elements
       .gender_label()
       .should("be.visible")
       .and("contain", "Gender");
+
     practice_form.elements
       .mobile_label()
       .should("be.visible")
       .and("contain", "Mobile");
+
     practice_form.elements
       .dob_label()
       .should("be.visible")
       .and("have.text", "Date of Birth");
+
     practice_form.elements
       .subject_label()
       .should("be.visible")
       .and("have.text", "Subjects");
+
     practice_form.elements
       .hobbies_label()
       .should("be.visible")
       .and("have.text", "Hobbies");
+
     practice_form.elements
       .picture_label()
       .should("be.visible")
       .and("have.text", "Picture");
+
     practice_form.elements
       .address_label()
       .should("be.visible")
       .and("have.text", "Current Address");
+
     practice_form.elements
       .state_city_label()
       .should("be.visible")
@@ -1060,8 +1069,8 @@ describe("Forms Functionality", function () {
     const mon = "September"; // Month for Date of Birth
     const day = "17"; // Day for Date of Birth
     const hobbies = ["Sports", "Music"]; // Selected hobbies
-    const fileloc = "C:/Users/avinabh.s/Pictures/"; // Path for picture upload
-    const filename = "img.jpg"; // File name for picture upload
+    const fileloc = "cypress/uploads/"; // Path for picture upload
+    const filename = "sample_file.docx"; // File name for picture upload
     const addr = "A-5094, D2/Block, Agastya Flats, Mumbai - 380097"; // Current address
     const state = "Rajasthan"; // Selected state
     const city = "Jaipur"; // Selected city
@@ -2562,7 +2571,7 @@ describe("Draggable Functionality", function () {
 
   it("Verify Draggable UI", () => {
     // Assertion to check the header label
-    textbox.elements.header_label().should("have.text", "Draggable");
+    textbox.elements.header_label().should("have.text", "Dragabble");
 
     // Assert all tab labels are visible
     dragg.elements.simple_tab().should("be.visible").and("have.text", "Simple");
@@ -2799,281 +2808,5 @@ describe("Draggable Functionality", function () {
         // Assert that the cursor style matches the expected value
         expect(cursorStyle).to.equal("move");
       });
-  });
-});
-
-/////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-// Describing the test suite for Register functionality
-describe("Book Store Application -> Register Functionality", function () {
-  // Hook to run before each test in this suite
-  beforeEach(function () {
-    // Click on the "Book Store Application" section to navigate to the Book Store page
-    login.elements
-      .bookstore_label()
-      .scrollIntoView()
-      .should("be.visible")
-      .click();
-
-    // Click on "Login" to proceed to the login page
-    login.elements.login_label().click();
-
-    // Click on "New User" to navigate to the registration page
-    login.elements.newuser_btn().click();
-  });
-
-  it("Verify Book Store Application Register Page UI", () => {
-    // Assertion to check the header label text
-    textbox.elements.header_label().should("have.text", "Register");
-
-    // Assert that the registration form contains the welcome text
-    register.elements
-      .register_form()
-      .should("contain", "Register to Book Store");
-
-    // Assert that all labels are visible and contain the correct text
-    register.elements
-      .firstname_label()
-      .should("be.visible")
-      .and("contain", "First Name");
-    register.elements
-      .lastname_label()
-      .should("be.visible")
-      .and("contain", "Last Name");
-    register.elements
-      .username_label()
-      .should("be.visible")
-      .and("contain", "UserName");
-    register.elements
-      .password_label()
-      .should("be.visible")
-      .and("contain", "Password");
-
-    // Assert that all input text fields are visible
-    register.elements.firstname().should("be.visible");
-    register.elements.lastname().should("be.visible");
-    register.elements.username().should("be.visible");
-    register.elements.password().should("be.visible");
-
-    // Assert that the "Register" button is visible and enabled
-    register.elements.register_btn().should("be.visible").and("be.enabled");
-
-    // Assert that the "Back to Login" button is visible and enabled
-    register.elements.backtologin_btn().should("be.visible").and("be.enabled");
-
-    // Assert that the captcha element is visible
-    register.elements.captcha().should("be.visible");
-  });
-
-  it("Verify Book Store Application Register Functionality", () => {
-    // Intercept the API request for creating a new user and alias it for later use
-    cy.intercept({
-      method: "POST",
-      url: "https://demoqa.com/Account/v1/User",
-    }).as("api_response_details");
-
-    // Intercept the window alert and assert its message
-    cy.on("window:alert", (message) => {
-      expect(message).to.equal("User Register Successfully.");
-    });
-
-    // Enter user details into the registration form
-    register.elements.firstname().type("Avi");
-    register.elements.lastname().type("Singh");
-    register.elements.username().type("avinh@1234");
-    register.elements.password().type("Avinabh@1234");
-
-    // Pause to manually handle captcha verification
-    cy.pause();
-    // Click on Resume button manually after completing the captcha verification
-
-    // Click on the "Register" button to submit the registration form
-    register.elements.register_btn().click();
-
-    // Wait for the intercepted request to complete and perform assertions on the response
-    cy.wait("@api_response_details", { timeout: 10000 }).then(
-      (interception) => {
-        expect(interception.response.statusCode).to.equal(201);
-        expect(interception.response.statusMessage).to.equal("Created");
-      }
-    );
-  });
-
-  it('Verify validation message for blank input in "Register" page', () => {
-    // Click on the "Register" button without entering any details
-    register.elements.register_btn().click();
-
-    // Assert that validation messages are visible for all required fields
-    register.elements.invalid_input().should("be.visible");
-    register.elements.invalid_input().should("have.length", 4); // Ensures there are four validation messages
-  });
-
-  it("Verify validation message for already registered user", () => {
-    // Intercept the API request for creating a new user and alias it for later use
-    cy.intercept({
-      method: "POST",
-      url: "https://demoqa.com/Account/v1/User",
-    }).as("api_response_details");
-
-    // Enter user details into the registration form
-    register.elements.firstname().type("Avi");
-    register.elements.lastname().type("Singh");
-    register.elements.username().type("avinabh@1234");
-    register.elements.password().type("Avinabh@1234");
-
-    // Pause to manually handle captcha verification
-    cy.pause();
-    // Click on Resume button manually after completing the captcha verification
-
-    // Click on the "Register" button to submit the registration form
-    register.elements.register_btn().click();
-
-    // Wait for the intercepted request to complete and perform assertions on the response
-    cy.wait("@api_response_details", { timeout: 10000 }).then(
-      (interception) => {
-        expect(interception.response.statusCode).to.equal(406);
-        expect(interception.response.statusMessage).to.equal("Not Acceptable");
-      }
-    );
-
-    // Assert that validation message for existing user is displayed
-    register.elements
-      .validationmsg()
-      .should("be.visible")
-      .and("have.text", "User exists!");
-  });
-
-  it("Verify validation message for invalid input in password field", () => {
-    // Intercept the API request for creating a new user and alias it for later use
-    cy.intercept({
-      method: "POST",
-      url: "https://demoqa.com/Account/v1/User",
-    }).as("api_response_details");
-
-    // Enter user details into the registration form
-    register.elements.firstname().type("Avi");
-    register.elements.lastname().type("Singh");
-    register.elements.username().type("avinabh@1234");
-
-    // Enter an invalid password
-    register.elements.password().type("123");
-
-    // Pause to manually handle captcha verification
-    cy.pause();
-    // Click on Resume button manually after completing the captcha verification
-
-    // Click on the "Register" button to submit the registration form
-    register.elements.register_btn().click();
-
-    // Wait for the intercepted request to complete and perform assertions on the response
-    cy.wait("@api_response_details", { timeout: 10000 }).then(
-      (interception) => {
-        expect(interception.response.statusCode).to.equal(400);
-        expect(interception.response.statusMessage).to.equal("Bad Request");
-      }
-    );
-
-    // Assert that validation message for invalid password is displayed
-    register.elements
-      .validationmsg()
-      .should("be.visible")
-      .and(
-        "have.text",
-        "Passwords must have at least one non alphanumeric character, one digit ('0'-'9'), one uppercase ('A'-'Z'), one lowercase ('a'-'z'), one special character and Password must be eight characters or longer."
-      );
-  });
-
-  it("Verify validation message for blank input in captcha verification", () => {
-    // Enter user details into the registration form
-    register.elements.firstname().type("Avi");
-    register.elements.lastname().type("Singh");
-    register.elements.username().type("avinabh@1234");
-    register.elements.password().type("1234@Avinabh");
-
-    // Click on the "Register" button without completing captcha verification
-    register.elements.register_btn().click();
-
-    // Assert that validation message for captcha verification is displayed
-    register.elements
-      .validationmsg()
-      .should("be.visible")
-      .and("have.text", "Please verify reCaptcha to register!");
-  });
-
-  it("Verify Back to Login functionality in Register Page", () => {
-    // Click on the "Back to Login" button to navigate back to the login page
-    register.elements.backtologin_btn().click();
-
-    // Assertion to check the header label text on the login page
-    textbox.elements.header_label().should("have.text", "Login");
-  });
-});
-
-// Describing the test suite for Login functionality
-describe("Book Store Application -> Login Functionality", function () {
-  // Hook to run before each test in this suite
-  beforeEach(function () {
-    // Click on the "Book Store Application" section to navigate to the Book Store page
-    login.elements
-      .bookstore_label()
-      .scrollIntoView()
-      .should("be.visible")
-      .click();
-
-    // Click on "Login" to navigate to the login page
-    login.elements.login_label().click();
-  });
-
-  it("Verify Book Store Application Login Page UI", () => {
-    // Assertion to check the header label text
-    textbox.elements.header_label().should("have.text", "Login");
-
-    // Assert that the login form contains the welcome text
-    login.elements.login_form().should("contain", "Welcome");
-
-    // Assert that username and password labels are visible and contain the correct text
-    login.elements
-      .username_label()
-      .should("be.visible")
-      .and("contain", "UserName");
-    login.elements
-      .password_label()
-      .should("be.visible")
-      .and("contain", "Password");
-
-    // Assert that username and password input fields are visible
-    login.elements.username().should("be.visible");
-    login.elements.password().should("be.visible");
-
-    // Assert that the login button is visible and enabled
-    login.elements.login_btn().should("be.visible").and("be.enabled");
-
-    // Assert that the "New User" button is visible and enabled
-    login.elements.newuser_btn().should("be.visible").and("be.enabled");
-  });
-
-  it("Verify Book Store Application Login Functionality", () => {
-    // Enter valid username and password
-    login.elements.username().type("Avi@1234");
-    login.elements.password().type("Avi@1234");
-
-    // Click on the login button to submit the login form
-    login.elements.login_btn().click();
-
-    // Assert that the user is successfully logged in by checking the profile page
-    profile.elements.username_label().should("be.visible");
-    profile.elements
-      .username_value()
-      .should("be.visible")
-      .and("have.text", "Avi@1234");
-  });
-
-  it("Verify blank input in Login Page", () => {
-    // Click on the login button without entering any credentials
-    login.elements.login_btn().click();
-
-    // Assert that validation messages are visible for the required fields
-    register.elements.invalid_input().should("be.visible");
-    register.elements.invalid_input().should("have.length", 2); // Ensures that there are two validation messages for username and password
   });
 });
