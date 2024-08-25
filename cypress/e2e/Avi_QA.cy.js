@@ -1,4 +1,4 @@
-// All pageobjects files are imported initially
+// Importing all necessary page object files initially
 import functions from "../pageObjects/functions";
 import textbox from "../pageObjects/Elements/Textbox";
 import checkbox from "../pageObjects/Elements/Checkbox";
@@ -33,74 +33,81 @@ import login from "../pageObjects/Book Store Application/Login";
 import register from "../pageObjects/Book Store Application/Register";
 import profile from "../pageObjects/Book Store Application/Profile";
 
-// Inbuilt function is set to not fail testcase when uncaught exceptions are generated
+// Setting Cypress to not fail test cases when uncaught exceptions occur
 Cypress.on("uncaught:exception", (err, runnable) => {
-  return false;
+  return false; // Prevents Cypress from failing the test
 });
 
-describe("DemoQA -> Text Box", () => {
+// Global before block to apply to all describe blocks in this file
+before(() => {
+  // Call a custom function to ignore ads
+  //functions.ignore_ad();
+
+  // Set the browser screen size to 1920x1080
+  cy.viewport(1920, 1080);
+
+  // Visit the demoQA website
+  cy.visit("https://demoqa.com/");
+});
+
+// Describing the test suite for Text Box functionality
+describe("Text Box Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(() => {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on ELEMENTS section
+    // Click on the ELEMENTS section to expand the menu
     textbox.elements.elements_label().should("be.visible").click();
 
-    //Assertion to check section heading
+    // Assertion to ensure the section heading is visible
     textbox.elements.elements_label().should("be.visible");
 
-    //Click on Textbox option
+    // Click on the Textbox option to navigate to the Textbox page
     textbox.elements.textbox_label().should("be.visible").click();
 
-    //Assertion to check header label
+    // Assertion to ensure the Textbox page header label is visible
     textbox.elements.header_label().should("be.visible");
   });
 
-  it("TC - 01 Verify Textbox UI", () => {
-    //Verify Full Name textbox label
+  // Test case to verify the UI elements of the Textbox page
+  it("Verify Textbox UI", () => {
+    // Verify the label of the Full Name textbox
     textbox.elements.full_name_label().should("have.text", "Full Name");
 
-    //Verify Email textbox label
+    // Verify the label of the Email textbox
     textbox.elements.email_label().should("have.text", "Email");
 
-    //Verify Current Address textbox label
+    // Verify the label of the Current Address textbox
     textbox.elements.current_add_label().should("have.text", "Current Address");
 
-    //Verify Permanent Address textbox label
+    // Verify the label of the Permanent Address textbox
     textbox.elements
       .permanent_add_label()
       .should("have.text", "Permanent Address");
   });
 
-  it("TC - 02 Verify Text Box Functionality", () => {
-    //Store data to be entered inside variables
+  // Test case to verify the functionality of the Text Box
+  it("Verify Text Box Functionality", () => {
+    // Store data to be entered inside variables
     const name = "Avi";
     const email = "Avi@gmail.com";
-    const cur_add = "Ahmedabad";
-    const per_add = "Surat";
+    const cur_add = "Sikkim";
+    const per_add = "Mumbai";
 
-    //Type the data in respective fields
+    // Type the data into the respective text fields
     textbox.elements.full_name().type(name);
     textbox.elements.email().type(email);
     textbox.elements.current_add().type(cur_add);
     textbox.elements.permanent_add().type(per_add);
 
-    //Click on submit button
+    // Click on the submit button
     textbox.elements.submit_btn().should("be.visible").click();
 
-    //Verify result dialog visibility
+    // Verify that the result dialog box is visible
     textbox.elements.result_box().should("be.visible");
 
-    //Execute wait command
+    // Execute wait command to ensure stability before assertions
     cy.wait(2000);
 
-    //Assert result dialog contains correct data
+    // Assert that the result dialog contains the correct data entered
     textbox.elements.result_name().should("contain.text", name);
     textbox.elements.result_email().should("contain.text", email);
     textbox.elements.result_curr_add().should("contain.text", cur_add);
@@ -108,112 +115,91 @@ describe("DemoQA -> Text Box", () => {
   });
 });
 
-describe("DemoQA -> Check Box", () => {
+// Describing the test suite for Check Box functionality
+describe("Check Box Functionality", () => {
+  // Hook to run before each test in this suite
   beforeEach(() => {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on ELEMENTS section
+    // Click on the ELEMENTS section to expand the menu
     textbox.elements.elements_label().should("be.visible").click();
 
-    //Click on Checkbox option
+    // Click on the Checkbox option to navigate to the Checkbox page
     checkbox.elements.checkbox_label().should("be.visible").click();
   });
 
-  it("TC - 01 Verify All Checkboxes", () => {
-    //Click on expand all
+  // Test case to verify the functionality of selecting all checkboxes
+  it("Verify checking all the checkboxes", () => {
+    // Click on the "Expand All" button to reveal all checkboxes
     checkbox.elements.expand().click();
 
-    //List to store the location of child elements
+    // List of checkbox indices that should not be clicked
     const noclick = [0, 1, 4, 5, 9, 14];
-    //Check all child checkboxes
+
+    // Iterate over all checkboxes and click each one, except those in the `noclick` list
     checkbox.elements.all_boxes().each(($element, index) => {
       if (!noclick.includes(index)) {
-        cy.wrap($element).click(); //wrapping the DOM element represented by $element so that you can perform actions or assertions on specific DOM elements.
+        cy.wrap($element).click(); // Wrap the DOM element to perform actions or assertions on it
       }
     });
-
-    // cy.get('[class="rct-checkbox"]').each(($element, index, $list) => {
-    //     // Perform actions on each element in the list
-    //     if(index != 0 && index != 1 && index != 4 && index != 5 && index != 9 && index != 14 ) {
-    //             cy.wrap($element).click();
-    //     }
-    //     else{
-    //              //Pass
-    //     }
-    //   });
   });
 
-  it("TC - 02 Verify Home Checkbox", () => {
-    //Click on Home checkbox
+  // Test case to verify the functionality of the "Home" checkbox
+  it("Verify 'Home' Checkbox functionality", () => {
+    // Click on the "Home" checkbox with force to ensure the click occurs even if the element is hidden or overlapped
     checkbox.elements.home_box().check({ force: true });
 
-    //Verify result dialog is visible
+    // Verify that the result dialog appears after the "Home" checkbox is selected
     checkbox.elements.result().should("exist");
 
-    //Verify Home checkbox is checked
+    // Assert that the "Home" checkbox is indeed checked
     checkbox.elements.home_box().should("be.checked");
 
-    //Uncheck Home checkbox
+    // Uncheck the "Home" checkbox with force
     checkbox.elements.home_box().uncheck({ force: true });
 
-    //Result dialog should no longer exist
+    // Verify that the result dialog disappears after the "Home" checkbox is unchecked
     checkbox.elements.result().should("not.exist");
 
-    //Home checkbox should be unchecked
+    // Assert that the "Home" checkbox is no longer checked
     checkbox.elements.home_box().should("not.be.checked");
   });
 
-  it("TC - 03 Verify click on all dropdowns & check checkboxes", () => {
-    //Click on 1st dropdown - (parent)
+  // Test case to verify the functionality of clicking on dropdowns and checking specific checkboxes
+  it("Verify click on all dropdowns & check checkboxes", () => {
+    // Click on the first dropdown icon to expand the parent checkbox list
     checkbox.elements.dropdown_icon().eq(0).click();
 
-    //Click on 2nd dropdown - (child)
+    // Click on the second dropdown icon to expand the child checkbox list
     checkbox.elements.dropdown_icon().eq(2).click();
 
-    //Click on 3rd dropdown - (grandchild)
+    // Click on the third dropdown icon to expand the grandchild checkbox list
     checkbox.elements.dropdown_icon().eq(4).click();
 
-    //Click on checkbox for "classified"
+    // Check the checkbox labeled "Classified" with force
     checkbox.elements.classified_checkbox().check({ force: true });
 
-    //Assertion to verify result section should contain checkbox name
+    // Assertion to verify that the result section contains the name "Classified" after it is selected
     checkbox.elements.result().should("contain", "classified");
   });
 
-  it("TC - 04 Verify Expand all & collapse dropdowns", () => {
-    //Click on "+" (expand all) icon
+  // Test case to verify the functionality of expanding and collapsing all dropdowns
+  it("Verify Expand all & collapse dropdowns", () => {
+    // Click on the "+" (expand all) icon to expand all dropdowns
     checkbox.elements.expand().click();
 
-    //Assesrtion to verify all are expanded
+    // Assertion to verify that all checkboxes are expanded
     checkbox.elements.all_expanded().should("exist");
-    cy.wait(3000);
+    cy.wait(3000); // Wait for 3 seconds to ensure all elements have fully expanded
 
-    //Click on "-" (collapse all) icon
+    // Click on the "-" (collapse all) icon to collapse all dropdowns
     checkbox.elements.collapse().click();
 
-    //Assesrtion to verify all are collapsed
+    // Assertion to verify that all checkboxes are collapsed
     checkbox.elements.all_expanded().should("not.exist");
   });
 });
 
-describe("DemoQA -> Radio Button", () => {
+describe("Radio Button Functionality", () => {
   beforeEach(() => {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
     //Click on ELEMENTS section
     textbox.elements.elements_label().should("be.visible").click();
 
