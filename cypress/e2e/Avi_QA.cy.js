@@ -47,7 +47,7 @@ beforeEach(function () {
   cy.viewport(1920, 1080);
 
   // Visit the demoQA website
-  cy.visit("https://demoqa.com/");
+  cy.visit("https://demoqa.com/", { timeout: 120000 });
 });
 
 // Describing the test suite for Text Box functionality
