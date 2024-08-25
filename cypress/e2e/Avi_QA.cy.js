@@ -38,10 +38,10 @@ Cypress.on("uncaught:exception", (err, runnable) => {
   return false; // Prevents Cypress from failing the test
 });
 
-// Global before block to apply to all describe blocks in this file
-before(() => {
+// Global beforeEach block to apply to all describe blocks in this file
+beforeEach(() => {
   // Call a custom function to ignore ads
-  //functions.ignore_ad();
+  functions.ignore_ad();
 
   // Set the browser screen size to 1920x1080
   cy.viewport(1920, 1080);
@@ -116,7 +116,7 @@ describe("Text Box Functionality", function () {
 });
 
 // Describing the test suite for Check Box functionality
-describe("Check Box Functionality", () => {
+describe("Check Box Functionality", function () {
   // Hook to run before each test in this suite
   beforeEach(() => {
     // Click on the ELEMENTS section to expand the menu
@@ -198,118 +198,86 @@ describe("Check Box Functionality", () => {
   });
 });
 
-describe("Radio Button Functionality", () => {
+// Describing the test suite for Radio Button functionality
+describe("Radio Button Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(() => {
-    //Click on ELEMENTS section
+    // Click on the ELEMENTS section
     textbox.elements.elements_label().should("be.visible").click();
 
-    //Click on Radio Button option
+    // Click on the Radio Button option
     radiobutton.elements.radiobutton_label().should("be.visible").click();
   });
 
-  it("TC - 01 Verify Radio button UI", () => {
-    //Assertion to check Header
+  it("Verify Radio button UI", () => {
+    // Assertion to check the Header visibility and text
     textbox.elements
       .header_label()
       .should("be.visible")
       .and("have.text", "Radio Button");
 
-    //Assertion to check clickable options
+    // Assertion to check the visibility of clickable options
     radiobutton.elements.enabled_option().should("be.visible");
 
-    //Assertion to check non-clickable options
+    // Assertion to check the visibility of non-clickable options
     radiobutton.elements.disbaled_option().should("be.visible");
   });
 
-  it("TC - 02 Verify click all radio buttons", () => {
-    //Assertion to check no result exists
+  it("Verify clicking on all radio buttons", () => {
+    // Assertion to ensure no result exists initially
     radiobutton.elements.result().should("not.exist");
 
-    //Click on YES radiobutton
+    // Click on YES radio button with force and verify it is checked
     radiobutton.elements.yes().click({ force: true });
-    //Assertion to check YES radiobutton is checked
     radiobutton.elements.yes().should("be.checked");
-    //Assertion to check IMPRESSIVE radiobutton is not checked
+
+    // Verify IMPRESSIVE radio button is not checked
     radiobutton.elements.impressive().should("not.be.checked");
-    //Assertion to check result should contain "YES"
+
+    // Verify result contains "Yes"
     radiobutton.elements.result().should("be.visible").and("contain", "Yes");
 
-    //Click on IMPRESSIVE radiobutton
+    // Click on IMPRESSIVE radio button with force and verify it is checked
     radiobutton.elements.impressive().click({ force: true });
-    //Assertion to check YES radiobutton is not checked
     radiobutton.elements.yes().should("not.be.checked");
-    //Assertionto check IMPRESSIVE radiobutton is checked
     radiobutton.elements.impressive().should("be.checked");
-    //Assertion to check result should contain "IMPRESSIVE"
+
+    // Verify result contains "Impressive"
     radiobutton.elements
       .result()
       .should("be.visible")
       .and("contain", "Impressive");
 
-    //Click on non-Clickable option "NO" forcefully
+    // Click on non-Clickable option "NO" forcefully (though it may not work)
     radiobutton.elements.no().click({ force: true });
   });
 });
 
-describe("DemoQA -> Web Tables", () => {
+// Describing the test suite for Web Tables functionality
+describe("Web Tables Functionality", function () {
+  // Describing the test suite for Text Box functionality
   beforeEach(() => {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on ELEMENTS section
+    // Click on the ELEMENTS section
     textbox.elements.elements_label().should("be.visible").click();
 
-    //Click on Web Tables option
+    // Click on Web Tables option
     webtables.elements.webtable_label().should("be.visible").click();
   });
 
-  it("TC - 01 Verify Web Tables UI", () => {
-    //Assertion to check Header
+  it("Verify Web Tables UI", () => {
+    // Assertion to check the Header visibility and text
     textbox.elements
       .header_label()
       .should("be.visible")
       .and("have.text", "Web Tables");
 
-    //Assertion to check add record button visible & clickable
+    // Assertion to check the visibility and enabled state of the add record button
     webtables.elements.addrecord_btn().should("be.visible").and("be.enabled");
 
-    //Assertion to check searchbar is visible
+    // Assertion to check the visibility of the search bar
     webtables.elements.searchbar().should("be.visible");
 
-    // webtables.elements.col_headers().each(($element, index) => {
-    //     if(index == 0 ){
-    //         cy.wrap($element).should('have.text','First Name'); }
-
-    //     else if(index == 1 ){
-    //         cy.wrap($element).should('have.text','Last Name'); }
-
-    //     else if(index == 2 ){
-    //         cy.wrap($element).should('have.text','Age'); }
-
-    //     else if(index == 3 ){
-    //         cy.wrap($element).should('have.text','Email'); }
-
-    //     else if(index == 4 ){
-    //         cy.wrap($element).should('have.text','Salary'); }
-
-    //     else if(index == 5 ){
-    //         cy.wrap($element).should('have.text','Department'); }
-
-    //     else if(index == 6 ){
-    //         cy.wrap($element).should('have.text','Action'); }
-
-    //     else{
-    //         cy.fail("Test case failed");
-    //     }
-    // });
-
-    //list to store column header names
+    // List to store column header names
     const column_names = [
       "First Name",
       "Last Name",
@@ -319,7 +287,8 @@ describe("DemoQA -> Web Tables", () => {
       "Department",
       "Action",
     ];
-    //Assertion to check column headers
+
+    // Assertion to check if each column header matches expected text
     webtables.elements.col_headers().each(($element, index) => {
       cy.wrap($element).should(
         "have.text",
@@ -327,21 +296,21 @@ describe("DemoQA -> Web Tables", () => {
       );
     });
 
-    //Assertion to check pagination visibility
+    // Assertion to check the visibility of pagination controls
     webtables.elements.pagination().should("be.visible");
   });
 
-  it("TC - 02 Verify adding records in a table", () => {
-    //Click on add record button
+  it("Verify adding records in a table", () => {
+    // Click on the add record button
     webtables.elements.addrecord_btn().click();
 
-    //Assertion to check Header
+    // Assertion to check the Registration Form header visibility and text
     webtables.elements
       .form_header()
       .should("be.visible")
       .and("have.text", "Registration Form");
 
-    //list to store field labels
+    // List to store field labels
     const label_names = [
       "First Name",
       "Last Name",
@@ -350,19 +319,19 @@ describe("DemoQA -> Web Tables", () => {
       "Salary",
       "Department",
     ];
-    //Assertion to check field labels
+
+    // Assertion to check if each field label matches expected text
     webtables.elements.form_fields().each(($element, index) => {
-      //text content of the element matches the expected value stored in label_names[index], If label_names[index] is falsy, it will display 'Test case failed' instead.
       cy.wrap($element).should(
         "have.text",
         label_names[index] || "Test case failed"
       );
     });
 
-    //Assertion to check submit button vibile & clickable
+    // Assertion to check the visibility and enabled state of the submit button
     webtables.elements.submit_btn().should("be.visible").and("be.enabled");
 
-    //Enter details in fields
+    // Enter details in the form fields
     webtables.elements.firstname().type("Avinabh");
     webtables.elements.lastname().type("Singh");
     webtables.elements.age().type("25");
@@ -370,10 +339,10 @@ describe("DemoQA -> Web Tables", () => {
     webtables.elements.salary().type("9999999");
     webtables.elements.dept().type("IT");
 
-    //Click on submit button
+    // Click on the submit button
     webtables.elements.submit_btn().click();
 
-    //Assertion to check filled value in table
+    // Assertion to verify that the new record is present in the table
     webtables.elements.table_rows().each(($element, index) => {
       if (index == 3) {
         cy.wrap($element).should("contain", "Avinabh");
@@ -381,28 +350,28 @@ describe("DemoQA -> Web Tables", () => {
     });
   });
 
-  it("TC - 03 Verify Register dialog for blank inputs", function () {
-    //Click on add record button
+  it("Verify Register dialog for blank inputs", () => {
+    // Click on the add record button
     webtables.elements.addrecord_btn().click();
 
-    //Click on submit button
+    // Click on the submit button without filling in any inputs
     webtables.elements.submit_btn().click();
 
-    //Assertion to check for class changed to 'was-validated'
+    // Assertion to check if the form is validated (class changes to 'was-validated')
     webtables.elements.register_form().should("have.class", "was-validated");
   });
 
-  it("TC - 04 Verify adding values after validation", function () {
-    //Click on add record button
+  it("Verify adding values after validation", () => {
+    // Click on the add record button
     webtables.elements.addrecord_btn().click();
 
-    //Click on submit button
+    // Click on the submit button without filling in any inputs
     webtables.elements.submit_btn().click();
 
-    //Assertion to check for class changed to 'was-validated'
+    // Assertion to check if the form is validated (class changes to 'was-validated')
     webtables.elements.register_form().should("have.class", "was-validated");
 
-    //Type & Check firstname field is filled
+    // Enter and verify that the first name field is filled
     webtables.elements.firstname().should("have.attr", "value", "");
     webtables.elements.firstname().type("Avinabh");
     webtables.elements
@@ -410,7 +379,7 @@ describe("DemoQA -> Web Tables", () => {
       .should("have.attr", "value")
       .and("not.be.empty");
 
-    //Type & Check lastname field is filled
+    // Enter and verify that the last name field is filled
     webtables.elements.lastname().should("have.attr", "value", "");
     webtables.elements.lastname().type("Singh");
     webtables.elements
@@ -418,17 +387,17 @@ describe("DemoQA -> Web Tables", () => {
       .should("have.attr", "value")
       .and("not.be.empty");
 
-    //Type & Check age field is filled
+    // Enter and verify that the age field is filled
     webtables.elements.age().should("have.attr", "value", "");
     webtables.elements.age().type(34);
     webtables.elements.age().should("have.attr", "value").and("not.be.empty");
 
-    //Type & Check email field is filled
+    // Enter and verify that the email field is filled
     webtables.elements.email().should("have.attr", "value", "");
     webtables.elements.email().type("Avi@gmail.com");
     webtables.elements.email().should("have.attr", "value").and("not.be.empty");
 
-    //Type & Check salary field is filled
+    // Enter and verify that the salary field is filled
     webtables.elements.salary().should("have.attr", "value", "");
     webtables.elements.salary().type(354784);
     webtables.elements
@@ -436,29 +405,28 @@ describe("DemoQA -> Web Tables", () => {
       .should("have.attr", "value")
       .and("not.be.empty");
 
-    //Type & Check department field is filled
+    // Enter and verify that the department field is filled
     webtables.elements.dept().should("have.attr", "value", "");
     webtables.elements.dept().type("ECE");
     webtables.elements.dept().should("have.attr", "value").and("not.be.empty");
   });
 
-  it("TC - 05 Verify validation for firstname", function () {
-    //Click on add record button
+  it("Verify validation for firstname", () => {
+    // Click on the add record button
     webtables.elements.addrecord_btn().click();
-    //Get the 'maxlength' attribute
+
+    // Type a long string in the firstname field and check if it exceeds maxlength
     webtables.elements
       .firstname()
       .type("ASKNDASDAJSDKJAKSDJ")
       .invoke("attr", "maxlength")
       .then((maxlength) => {
-        //Pass the retrieved value of maxlength from input to value variable
         webtables.elements
           .firstname()
           .invoke("val")
           .then((value) => {
             const inputValueLength = value.length; // Get the length of the input value
             if (inputValueLength <= parseInt(maxlength)) {
-              //parseInt() is commonly used to convert Strings to Integers
               cy.log(
                 "Test case passed - Value length is less than or equal to maxlength"
               );
@@ -469,96 +437,103 @@ describe("DemoQA -> Web Tables", () => {
       });
   });
 
-  it("TC - 06 Verify Email RegEX", function () {
-    //Click on add record button
+  it("Verify Email RegEX", () => {
+    // Click on the add record button to open the form for adding a new record
     webtables.elements.addrecord_btn().click();
 
-    //Type email address
+    // Type a valid email address in the email input field
     webtables.elements.email().type("avi123@gmail.com");
 
-    //Assertion to validated invalid email address
+    // Assertion to validate that the email address follows the correct format
     webtables.elements
       .email()
-      .invoke("val")
+      .invoke("val") // Get the value from the email input field
       .then((email) => {
+        // Check if the email matches the regular expression for valid emails
         if (
           !email.match(
             /^([a-zA-Z0-9_\-\.]+)@([a-zA-Z0-9_\-\.]+)\.([a-zA-Z]{2,5})$/
           )
         ) {
+          // Fail the test if the email format is invalid
           cy.fail("Invalid email");
         }
       });
   });
 
-  it("TC - 07 Verify Salary RegEX", function () {
-    //Click on add record button
+  it("Verify Salary RegEX", () => {
+    // Click on the add record button to open the form for adding a new record
     webtables.elements.addrecord_btn().click();
 
-    //Type salary
+    // Type a salary value in the salary input field
     webtables.elements.salary().type("9999999");
 
-    //Assertion to validated invalid salary
+    // Assertion to validate that the salary contains only digits
     webtables.elements
       .salary()
-      .invoke("val")
+      .invoke("val") // Get the value from the salary input field
       .then((salary) => {
+        // Check if the salary matches the regular expression for digits only
         if (!salary.match(/^\d*$/)) {
+          // Fail the test if the salary contains non-digit characters
           cy.fail("Invalid salary");
         }
       });
   });
 
-  it("TC - 08 Verify Age RegEX", function () {
-    //Click on add record button
+  it("Verify Age RegEX", () => {
+    // Click on the add record button to open the form for adding a new record
     webtables.elements.addrecord_btn().click();
 
-    //Type Age
+    // Type an age value in the age input field
     webtables.elements.age().type("42");
 
-    //Assertion to validated invalid Age
+    // Assertion to validate that the age contains only digits
     webtables.elements
       .age()
-      .invoke("val")
+      .invoke("val") // Get the value from the age input field
       .then((age) => {
+        // Check if the age matches the regular expression for digits only
         if (!age.match(/^\d*$/)) {
+          // Fail the test if the age contains non-digit characters
           cy.fail("Invalid age");
         }
       });
   });
 
-  it("TC - 09 Verify searchbar functionality", function () {
-    //Declare a constant that stores searched data
+  it("Verify searchbar functionality", () => {
+    // Declare a constant to store the search data
     const search_data = "Vega";
 
-    //Type data to be searched in searchbar
+    // Type the search data in the search bar input field
     webtables.elements.searchbar().type(search_data);
-    cy.wait(3000);
-    //Assertion to be checked only on 1st row of the table
+    cy.wait(3000); // Wait for 3 seconds to allow the search results to load
+
+    // Assertion to validate that the search results are correct
     webtables.elements
       .table_rows()
-      .eq(0)
-      .invoke("text")
+      .eq(0) // Check the first row of the table
+      .invoke("text") // Get the text content of the row
       .then((text) => {
         if (text.trim() == "") {
+          // If the first row is empty, log that the table body is empty
           cy.log("Table body is empty");
+
+          // Check that the empty table message is displayed
           webtables.elements.empty_table().should("contain", "No rows found");
         } else {
-          //Iterate over each row
+          // Iterate over each row in the table to check the search results
           webtables.elements.table_rows().each((row) => {
-            //Invoke text present inside each row
+            // Get the text content of each row
             cy.wrap(row)
               .invoke("text")
               .then((text) => {
-                //Take rows(childern) one by one that are present inside table body, check for length
-                //if (Cypress.$('.rt-tbody').find('.rt-tr').length > 0 && Cypress.$('.rt-tbody').text().trim() === '')
-
-                //text.trim() === '' is used to check if the text content of the row is empty after removing any leading or trailing whitespace characters.
+                // Check if the row contains the search data or is blank
                 if (text.includes(search_data) || text.trim() === "") {
-                  //Valid result found
+                  // Log that a valid search result or blank row was found
                   cy.log("Valid search result or blank row");
                 } else {
-                  //Fail test if the condition is not met
+                  // Fail the test if the search results are invalid
                   cy.fail("Invalid search results");
                 }
               });
@@ -567,48 +542,58 @@ describe("DemoQA -> Web Tables", () => {
       });
   });
 
-  it("TC - 10 Verify Pagination functionality", () => {
-    //Add Multiple records - function called
+  it("Verify Pagination functionality", () => {
+    // Add multiple records to the table by calling a function
     webtables.addMultiRecords();
 
-    //Click on dropdown for number of rows
+    // Click on the dropdown to select the number of rows displayed per page
     webtables.elements.pagination_dropdown().select("5");
 
-    //Assertion to check page number
+    // Assertion to check that the page number is set to 1
     webtables.elements.page_number().should("have.attr", "value", 1);
 
-    //Click on Next Button
+    // Click on the Next Button to go to the next page
     webtables.elements.next_btn().click();
 
-    //Assertion to check page number
+    // Assertion to check that the page number is set to 2
     webtables.elements.page_number().should("have.attr", "value", 2);
 
-    //Click on Previous Button
+    // Click on the Previous Button to go back to the previous page
     webtables.elements.previous_btn().click();
 
-    //Assertion to check page number
+    // Assertion to check that the page number is set back to 1
     webtables.elements.page_number().should("have.attr", "value", 1);
   });
 
-  it("TC - 11 Verify editing a particular record", function () {
-    //Click on edit icon for particular record
+  it("Verify editing a particular record", () => {
+    // Click on the edit icon for a specific record to open the edit form
     webtables.elements.edit_record().click();
 
-    //Assert Register dialog should open
+    // Assert that the register form dialog is visible
     webtables.elements.register_form().should("be.visible");
 
-    //Enter details in fields
+    // Clear and enter new details in the first name input field
     webtables.elements.firstname().clear().type("Avinabh");
+
+    // Clear and enter new details in the last name input field
     webtables.elements.lastname().clear().type("Singh");
+
+    // Clear and enter new details in the age input field
     webtables.elements.age().clear().type("25");
+
+    // Clear and enter new details in the email input field
     webtables.elements.email().clear().type("Avi@gmail.com");
+
+    // Clear and enter new details in the salary input field
     webtables.elements.salary().clear().type("9999999");
+
+    // Clear and enter new details in the department input field
     webtables.elements.dept().clear().type("IT");
 
-    //Click on submit button
+    // Click on the submit button to save the edited record
     webtables.elements.submit_btn().click();
 
-    //Assertion to check filled value is displayed in table
+    // Assertion to check that the edited value is displayed in the table
     webtables.elements.table_rows().each(($element, index) => {
       if (index == 2) {
         cy.wrap($element).should("contain", "Avinabh");
@@ -616,120 +601,105 @@ describe("DemoQA -> Web Tables", () => {
     });
   });
 
-  it("TC - 12 Verify deleting a particular record", function () {
-    //Click on delete icon for a record
+  it("Verify deleting a particular record", () => {
+    // Click on the delete icon for a specific record
     webtables.elements.delete_record().click();
 
-    //Assertion to check row removed from table
+    // Assertion to check that the deleted record is removed from the table
     webtables.elements.delete_record().should("not.exist");
   });
 });
 
-describe("DemoQA -> Buttons", () => {
+// Describing the test suite for Button functionality
+describe("Buttons Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(() => {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on ELEMENTS section
+    // Click on the ELEMENTS section in the sidebar
     textbox.elements.elements_label().should("be.visible").click();
 
-    //Click on Buttons option
+    // Click on the Buttons option in the ELEMENTS section
     button.elements.button_label().should("be.visible").click();
 
-    //Assertion to check header label
+    // Assert that the header label is visible and contains the text "Buttons"
     textbox.elements
       .header_label()
       .should("be.visible")
       .and("contain", "Buttons");
   });
 
-  it("TC - 01 Verify double click functionality", () => {
-    //Perform Double Click
+  it("Verify double click functionality", () => {
+    // Perform a double-click action on the button
     button.elements.dbclick_btn().dblclick();
 
-    //Assertion to check result for double click
+    // Assert that the result message for double-click action is displayed and contains "double click"
     button.elements.dbclick_msg().should("contain", "double click");
   });
 
-  it("TC - 02 Verify right click functionality", () => {
-    //Perform right click
+  it("Verify right click functionality", () => {
+    // Perform a right-click action on the button
     button.elements.rightclick_btn().rightclick();
 
-    //Assertion to check result of right click
+    // Assert that the result message for right-click action is displayed and contains "right click"
     button.elements.rightclick_msg().should("contain", "right click");
   });
 
-  it("TC - 03 Verify dynamic click functionality", () => {
-    //Perform click on dynamic element
+  it("Verify dynamic click functionality", () => {
+    // Perform a click action on the dynamic button element (third button)
     button.elements.clickme_btn().eq(2).click(); // Clicks the second child
 
-    //Assertion to check result of click
+    // Assert that the result message for dynamic click action is displayed and contains "dynamic click"
     button.elements.clickme_msg().should("contain", "dynamic click");
   });
 });
 
-describe("DemoQA -> Links", () => {
+// Describing the test suite for Links functionality
+describe("Links Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(() => {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on ELEMENTS section
+    // Click on the ELEMENTS section in the sidebar
     textbox.elements.elements_label().should("be.visible").click();
 
-    //Click on Links option
+    // Click on the Links option in the ELEMENTS section
     links.elements.links_label().should("be.visible").click();
   });
 
-  it("TC - 01 Verify user is redirected by passing assertion on HTML attributes", () => {
-    //Assertion to check Header Label
+  it("Verify user is redirected by passing assertion on HTML attributes", () => {
+    // Assert that the header label is visible and contains the text "Links"
     textbox.elements
       .header_label()
       .should("be.visible")
       .and("contain", "Links");
 
-    //Click on 1st - HOME link
-    //(target="_blank") this is used to indicate that it opens in a new tab.
+    // Click on the first HOME link, which opens in a new tab (target="_blank")
     links.elements.home_link1().should("have.attr", "target", "_blank").click();
   });
 
-  it("TC - 02 Verify user is redirected by passing assertion on URL", () => {
-    //Click on 2nd - HOME link
-    //The target attribute specifies where to open the linked document. By removing it, we ensure that the link opens in the same tab.
+  it("Verify user is redirected by passing assertion on URL", () => {
+    // Click on the second HOME link, removing the target attribute to ensure it opens in the same tab
     links.elements.home_link2().invoke("removeAttr", "target").click();
 
-    //cy.window() is used to access properties and methods of the browser's window object, such as location, localStorage, sessionStorage, etc.
+    // Access the browser's window object to verify the URL
     cy.window().then((win) => {
-      //Assertion to check if a new tab is opened
+      // Assert that the new URL is not equal to the previous one
       expect(win.location.href).to.not.equal("https://demoqa.com/links");
     });
   });
 
-  it('TC - 03 API call for "Created" link -- 201', () => {
-    //Used to intercept URL requests made
+  it('API call for "Created" link -- 201', () => {
+    // Intercept the API request made by the link
     cy.intercept({
       method: "GET",
       url: "https://demoqa.com/*",
       hostname: "demoqa.com",
-    }).as("api_response_details"); //as is used to pass an alias name. which stores the reponse of API call
+    }).as("api_response_details"); // Alias the intercepted request for later reference
 
-    //Click on link
+    // Click on the "Created" link to trigger the API call
     links.elements.created_link().click();
 
-    //Wait for the intercepted request and perform assertions using alias name
+    // Wait for the intercepted request and perform assertions
     cy.wait("@api_response_details", { timeout: 10000 }).then(
       (interception) => {
+        // Assert that the API response has a status code of 201 and status message "Created"
         expect(interception.response.statusCode).to.equal(201);
         expect(interception.response.statusMessage).to.equal("Created");
         expect(interception.request.method).to.equal("GET");
@@ -737,20 +707,21 @@ describe("DemoQA -> Links", () => {
     );
   });
 
-  it('TC - 04 API call for "No Content" link -- 204', () => {
-    //Used to intercept URL requests made
+  it('API call for "No Content" link -- 204', () => {
+    // Intercept the API request made by the link
     cy.intercept({
       method: "GET",
       url: "https://demoqa.com/*",
       hostname: "demoqa.com",
     }).as("api_response_details");
 
-    //Click on link
+    // Click on the "No Content" link to trigger the API call
     links.elements.nocontent_link().click();
 
-    //Wait for the intercepted request and perform assertions
+    // Wait for the intercepted request and perform assertions
     cy.wait("@api_response_details", { timeout: 10000 }).then(
       (interception) => {
+        // Assert that the API response has a status code of 204 and status message "No Content"
         expect(interception.response.statusCode).to.equal(204);
         expect(interception.response.statusMessage).to.equal("No Content");
         expect(interception.request.method).to.equal("GET");
@@ -758,20 +729,21 @@ describe("DemoQA -> Links", () => {
     );
   });
 
-  it('TC - 05 API call for "Moved" link -- 301', () => {
-    //Used to intercept URL requests made
+  it('API call for "Moved" link -- 301', () => {
+    // Intercept the API request made by the link
     cy.intercept({
       method: "GET",
       url: "https://demoqa.com/*",
       hostname: "demoqa.com",
     }).as("api_response_details");
 
-    //Click on link
+    // Click on the "Moved" link to trigger the API call
     links.elements.moved_link().click();
 
-    //Wait for the intercepted request and perform assertions
+    // Wait for the intercepted request and perform assertions
     cy.wait("@api_response_details", { timeout: 10000 }).then(
       (interception) => {
+        // Assert that the API response has a status code of 301 and status message "Moved Permanently"
         expect(interception.response.statusCode).to.equal(301);
         expect(interception.response.statusMessage).to.equal(
           "Moved Permanently"
@@ -781,20 +753,21 @@ describe("DemoQA -> Links", () => {
     );
   });
 
-  it('TC - 06 API call for "Bad Request" link -- 400', () => {
-    //Used to intercept URL requests made
+  it('API call for "Bad Request" link -- 400', () => {
+    // Intercept the API request made by the link
     cy.intercept({
       method: "GET",
       url: "https://demoqa.com/*",
       hostname: "demoqa.com",
     }).as("api_response_details");
 
-    //Click on link
+    // Click on the "Bad Request" link to trigger the API call
     links.elements.badrequest_link().click();
 
-    //Wait for the intercepted request and perform assertions
+    // Wait for the intercepted request and perform assertions
     cy.wait("@api_response_details", { timeout: 10000 }).then(
       (interception) => {
+        // Assert that the API response has a status code of 400 and status message "Bad Request"
         expect(interception.response.statusCode).to.equal(400);
         expect(interception.response.statusMessage).to.equal("Bad Request");
         expect(interception.request.method).to.equal("GET");
@@ -802,20 +775,21 @@ describe("DemoQA -> Links", () => {
     );
   });
 
-  it('TC - 07 API call for "Unauthorized" link -- 401', () => {
-    //Used to intercept URL requests made
+  it('API call for "Unauthorized" link -- 401', () => {
+    // Intercept the API request made by the link
     cy.intercept({
       method: "GET",
       url: "https://demoqa.com/*",
       hostname: "demoqa.com",
     }).as("api_response_details");
 
-    //Click on link
+    // Click on the "Unauthorized" link to trigger the API call
     links.elements.unautho_link().click();
 
-    //Wait for the intercepted request and perform assertions
+    // Wait for the intercepted request and perform assertions
     cy.wait("@api_response_details", { timeout: 10000 }).then(
       (interception) => {
+        // Assert that the API response has a status code of 401 and status message "Unauthorized"
         expect(interception.response.statusCode).to.equal(401);
         expect(interception.response.statusMessage).to.equal("Unauthorized");
         expect(interception.request.method).to.equal("GET");
@@ -823,20 +797,21 @@ describe("DemoQA -> Links", () => {
     );
   });
 
-  it('TC - 08 API call for "Forbidden" link -- 403', () => {
-    //Used to intercept URL requests made
+  it('API call for "Forbidden" link -- 403', () => {
+    // Intercept the API request made by the link
     cy.intercept({
       method: "GET",
       url: "https://demoqa.com/*",
       hostname: "demoqa.com",
     }).as("api_response_details");
 
-    //Click on link
+    // Click on the "Forbidden" link to trigger the API call
     links.elements.forbid_link().click();
 
-    //Wait for the intercepted request and perform assertions
+    // Wait for the intercepted request and perform assertions
     cy.wait("@api_response_details", { timeout: 10000 }).then(
       (interception) => {
+        // Assert that the API response has a status code of 403 and status message "Forbidden"
         expect(interception.response.statusCode).to.equal(403);
         expect(interception.response.statusMessage).to.equal("Forbidden");
         expect(interception.request.method).to.equal("GET");
@@ -844,20 +819,21 @@ describe("DemoQA -> Links", () => {
     );
   });
 
-  it('TC - 09 API call for "Not Found" link -- 404', () => {
-    //Used to intercept URL requests made
+  it('API call for "Not Found" link -- 404', () => {
+    // Intercept the API request made by the link
     cy.intercept({
       method: "GET",
       url: "https://demoqa.com/*",
       hostname: "demoqa.com",
     }).as("api_response_details");
 
-    //Click on link
+    // Click on the "Not Found" link to trigger the API call
     links.elements.notfound().click();
 
-    //Wait for the intercepted request and perform assertions
+    // Wait for the intercepted request and perform assertions
     cy.wait("@api_response_details", { timeout: 10000 }).then(
       (interception) => {
+        // Assert that the API response has a status code of 404 and status message "Not Found"
         expect(interception.response.statusCode).to.equal(404);
         expect(interception.response.statusMessage).to.equal("Not Found");
         expect(interception.request.method).to.equal("GET");
@@ -866,41 +842,33 @@ describe("DemoQA -> Links", () => {
   });
 });
 
-describe("DemoQA -> Broken Links & Images", () => {
+// Describing the test suite for Images functionality
+describe("Broken Links & Images Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(() => {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on ELEMENTS section
+    // Click on the ELEMENTS section in the sidebar
     textbox.elements.elements_label().should("be.visible").click();
 
-    //Click on Broken Links & Images option
+    // Click on the Broken Links & Images option in the ELEMENTS section
     broken.elements.broken_label().should("be.visible").click();
 
-    //Assertion to check header label
+    // Assert that the header label is visible
     textbox.elements.header_label().should("be.visible");
   });
 
-  it("TC - 01 Verify UI ", () => {
-    //Assertion to check Header Label
+  it("Verify Broken Links & Images UI", () => {
+    // Assert that the header label contains the text "Broken Links - Images"
     textbox.elements.header_label().should("contain", "Broken Links - Images");
 
-    //Assertion to check valid image is visible
+    // Assert that a valid image is visible
     broken.elements.valid_img().should("be.visible");
 
-    //Assertion to check default broken image is visible
+    // Assert that the default broken image is visible
     broken.elements.broken_img().should("be.visible");
   });
 
-  it("TC - 02 Verify valid Image", () => {
-    //Assertion for valid image
-    //have.prop yields the value of passed attribute i.e. nautralWidth
+  it("Verify valid Image", () => {
+    // Assert that the valid image is visible and its natural width is greater than 0
     broken.elements
       .valid_img()
       .should("be.visible")
@@ -908,8 +876,8 @@ describe("DemoQA -> Broken Links & Images", () => {
       .should("be.greaterThan", 0);
   });
 
-  it("TC - 03 Verify broken Image", () => {
-    //Assertion for broken image
+  it("Verify broken Image", () => {
+    // Assert that the broken image is visible and its natural width is 0
     broken.elements
       .broken_img()
       .should("be.visible")
@@ -918,97 +886,83 @@ describe("DemoQA -> Broken Links & Images", () => {
   });
 });
 
-describe("Tools QA -> Upload and Download", () => {
+// Describing the test suite for Upload and Download functionality
+describe("Upload and Download Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(() => {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on ELEMENTS section
+    // Click on the ELEMENTS section in the sidebar
     textbox.elements.elements_label().should("be.visible").click();
 
-    //Click on Upload and Download option
+    // Click on the Upload and Download option in the ELEMENTS section
     up_down.elements.broken_label().should("be.visible").click();
   });
 
-  it("TC - 01 Verify UI", () => {
-    //Assertion to check Header Label
+  it("Verify Upload and Download UI", () => {
+    // Assert that the header label contains the text "Upload and Download"
     textbox.elements.header_label().should("contain", "Upload and Download");
 
-    //Assertion to check download button is visible
+    // Assert that the download button is visible
     up_down.elements.download_btn().should("be.visible");
 
-    //Assertion to check upload button is visible
+    // Assert that the upload button is visible
     up_down.elements.upload_btn().should("be.visible");
   });
 
-  it("TC - 02 Verify Download functionality", () => {
-    //Assertion to check download button is visible
+  it("Verify Download functionality", () => {
+    // Assert that the download button is visible
     up_down.elements.download_btn().should("be.visible");
 
-    //Click on download button
+    // Click on the download button
     up_down.elements.download_btn().click();
 
-    //Assertion to check user is redirected using _blank attribute
+    // Assert that the user is redirected using the _blank attribute
     up_down.elements.download_btn().should("have.attr", "target", "_blank");
   });
 
-  it("TC - 03 Verify Upload functionality", () => {
-    //Assertion to check upload button is visible
+  it("Verify Upload functionality", () => {
+    // Assert that the upload button is visible
     up_down.elements.upload_btn().should("be.visible");
 
-    //Upload a valid file
+    // Upload a valid file
     up_down.elements
       .upload_btn()
       .selectFile("C:/Users/avinabh.s/Pictures/img.jpg");
 
-    //Assertion to check file is uploaded successfully
+    // Assert that the file path contains the uploaded file name
     up_down.elements.file_path().should("contain", "img.jpg");
   });
 });
 
-describe("Demo QA -> Dynamic Properties", () => {
+// Describing the test suite for Dynamic Properties functionality
+describe("Dynamic Properties Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(() => {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on ELEMENTS section
+    // Click on the ELEMENTS section in the sidebar
     textbox.elements.elements_label().should("be.visible").click();
 
-    //Click on Upload and Download option
+    // Click on the Dynamic Properties option in the ELEMENTS section
     dynamic.elements.dynamic_label().should("be.visible").click();
 
-    //Assertion to check header label
+    // Assert that the header label is visible and contains the text "Dynamic Properties"
     textbox.elements
       .header_label()
       .should("be.visible")
       .and("contain", "Dynamic Properties");
   });
 
-  it("TC - 01 Enables button after 5 seconds", () => {
-    //Assert that the button is initially disabled
+  it("Enables button after 5 seconds", () => {
+    // Assert that the button is initially disabled
     dynamic.elements.before_enable().should("be.disabled");
 
-    //Wait for 5 seconds
+    // Wait for 5 seconds
     cy.wait(5000);
 
-    //Assert that the button is enabled after 5 seconds
+    // Assert that the button is enabled after 5 seconds
     dynamic.elements.before_enable().should("not.be.disabled");
   });
 
-  it("TC - 02 Changes text color after 5 seconds wait", () => {
-    //Wait for color to change after 5 seconds
+  it("Changes text color after 5 seconds wait", () => {
+    // Wait for the text color to change after 5 seconds
     cy.wait(5000);
 
     // Assert that the text color has changed to red
@@ -1017,7 +971,7 @@ describe("Demo QA -> Dynamic Properties", () => {
       .should("have.css", "color", "rgb(220, 53, 69)");
   });
 
-  it("TC - 03 New element is visible after 5 seconds", () => {
+  it("New element is visible after 5 seconds", () => {
     // Assert that the element is initially not visible
     dynamic.elements.after_visible().should("not.exist");
 
@@ -1029,34 +983,27 @@ describe("Demo QA -> Dynamic Properties", () => {
   });
 });
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////
 
-describe("Demo QA -> Forms", () => {
-  beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on FORM section
+// Describing the test suite for Forms functionality
+describe("Forms Functionality", function () {
+  // Hook to run before each test in this suite
+  beforeEach(() => {
+    // Click on the FORM section in the sidebar
     practice_form.elements.form_label().should("be.visible").click();
 
-    //Click on Practice Form
+    // Click on the Practice Form within the FORM section
     practice_form.elements.practice_form_label().click();
   });
 
-  it("TC - 01 Verify Practice Form UI", function () {
-    //Assertion to check header label
+  it("Verify Practice Form UI", () => {
+    // Assert that the header label is visible and contains the text "Practice Form"
     textbox.elements
       .header_label()
       .should("be.visible")
       .and("have.text", "Practice Form");
 
-    //Assertion on visiblity of all the labels
+    // Assert that all the form labels are visible and have the correct text
     practice_form.elements
       .name_label()
       .should("be.visible")
@@ -1097,84 +1044,76 @@ describe("Demo QA -> Forms", () => {
       .state_city_label()
       .should("be.visible")
       .and("have.text", "State and City");
+
+    // Assert that the submit button is visible and enabled
     practice_form.elements.submit_btn().should("be.visible").and("be.enabled");
   });
 
-  it("TC - 02 Verify Practice Form Functionality", function () {
-    //Storing values inside variables
+  it("Verify Practice Form Functionality", () => {
+    // Storing values inside variables for use in the form
     const firstname = "Aaksh";
     const lastname = "Yadav";
     const emailid = "aaksh123@gmail.com";
     const mobilenumber = 8745547896;
     const subjects = ["Maths", "Physics", "Computer Science", "Accounting"];
-    //dob
-    const yr = "2000";
-    const mon = "September";
-    const day = "17";
-    //Hobbies
-    const hobbies = ["Sports", "Music"];
-    //Choose picture
-    const fileloc = "C:/Users/avinabh.s/Pictures/";
-    const filename = "img.jpg";
-    //Address
-    const addr = "A-5094, D2/Block, Agastya Flats, Mumbai - 380097";
-    //State and city
-    const state = "Rajasthan";
-    const city = "Jaipur";
+    const yr = "2000"; // Year for Date of Birth
+    const mon = "September"; // Month for Date of Birth
+    const day = "17"; // Day for Date of Birth
+    const hobbies = ["Sports", "Music"]; // Selected hobbies
+    const fileloc = "C:/Users/avinabh.s/Pictures/"; // Path for picture upload
+    const filename = "img.jpg"; // File name for picture upload
+    const addr = "A-5094, D2/Block, Agastya Flats, Mumbai - 380097"; // Current address
+    const state = "Rajasthan"; // Selected state
+    const city = "Jaipur"; // Selected city
 
-    //Enter first name
+    // Enter first name
     practice_form.elements.first_name().type(firstname);
 
-    //Enter last name
+    // Enter last name
     practice_form.elements.last_name().type(lastname);
 
-    //Enter email
+    // Enter email
     practice_form.elements.email().type(emailid);
 
-    //Choose Gender
+    // Select Gender as Male
     practice_form.elements.male().check({ force: true });
 
-    //Enter Mobile number
+    // Enter Mobile number
     practice_form.elements.number().type(mobilenumber);
 
-    //Choose Date of Birth
+    // Choose Date of Birth
     practice_form.elements.dob().click();
-    //Select Year
-    practice_form.elements.year().select(yr);
-    //Select Month
-    practice_form.elements.month().select(mon);
-    //Select Day
-    practice_form.elements.day().click();
+    practice_form.elements.year().select(yr); // Select Year
+    practice_form.elements.month().select(mon); // Select Month
+    practice_form.elements.day().click(); // Select Day
 
-    //Choose Subjects
-    //Loop through the list
+    // Choose Subjects by looping through the list
     subjects.forEach((element) => {
-      //Type the current element into the text field and press enter
       practice_form.elements.subject().type(`${element}{enter}`);
     });
 
-    //Choose Hobbies
+    // Choose Hobbies
     practice_form.elements.sports().check({ force: true });
     practice_form.elements.music().check({ force: true });
 
-    //Choose Picture
+    // Choose Picture to upload
     practice_form.elements.picture_choose().selectFile(fileloc + filename);
 
-    //Enter current address
+    // Enter current address
     practice_form.elements.address().type(addr);
 
-    //Select State
+    // Select State
     practice_form.elements.state().click();
     practice_form.elements.rj().click();
 
-    //Select City
+    // Select City
     practice_form.elements.city().click();
     practice_form.elements.jaipur().click();
 
-    //Click on submit button
+    // Click on submit button
     practice_form.elements.submit_btn().click();
 
-    //Asserting the label and value pairs inside the table
+    // Assert that the form result table contains the correct values
     practice_form.elements.result_table().within(() => {
       cy.contains("tr", "Student Name")
         .find("td")
@@ -1193,7 +1132,6 @@ describe("Demo QA -> Forms", () => {
         .find("td")
         .eq(1)
         .should("contain", day + " " + mon + "," + yr);
-
       cy.contains("tr", "Subjects")
         .find("td")
         .eq(1)
@@ -1201,13 +1139,11 @@ describe("Demo QA -> Forms", () => {
         .and("contain", subjects[1])
         .and("contain", subjects[2])
         .and("contain", subjects[3]);
-
       cy.contains("tr", "Hobbies")
         .find("td")
         .eq(1)
         .should("contain", hobbies[0])
         .and("contain", hobbies[1]);
-
       cy.contains("tr", "Picture").find("td").eq(1).should("contain", filename);
       cy.contains("tr", "Address").find("td").eq(1).should("contain", addr);
       cy.contains("tr", "State and City")
@@ -1218,201 +1154,152 @@ describe("Demo QA -> Forms", () => {
   });
 });
 
-//////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-
-describe("Demo QA -> Browser Windows", () => {
-  beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Alerts, Frame & Windows section
+//////////////////////////////////////////////////////////////////////////////////////////////////
+// Describing the test suite for Browser Windows functionality
+describe("Browser Windows Functionality", function () {
+  // Hook to run before each test in this suite
+  beforeEach(() => {
+    // Click on the "Alerts, Frame & Windows" section to navigate
     browserwindows.elements.alertsframewindows().should("be.visible").click();
 
-    //Click on Browser Windows
+    // Click on the "Browser Windows" option to open the correct page
     browserwindows.elements.browserwindows_label().click();
 
-    //Assertion to check Header
+    // Assert that the header label is correct
     textbox.elements.header_label().should("have.text", "Browser Windows");
   });
 
-  it("TC - 01 Verify New Tab Functionality", function () {
-    //Intercept the window.open method
+  it("Verify New Tab Functionality", () => {
+    // Intercept the window.open method to prevent the actual opening of a new tab/window
     cy.window().then((win) => {
-      //cy.stub(object, methodName) - instead of the original method being executed, the stub function is called instead.
+      // Replace the window.open function with a stub
       cy.stub(win, "open").as("newtabcall");
     });
 
-    //Click on New Tab button
+    // Click on the "New Tab" button
     browserwindows.elements.newtab().click();
 
-    //Assert that the window.open method was called
-    //This is a Chai assertion that checks if the stub has been called exactly once.
+    // Assert that the window.open method was called exactly once
     cy.get("@newtabcall").should("have.been.calledOnce");
   });
 
-  it("TC - 02 Verify New Window Functionality", function () {
-    //Intercept the window.open method
+  it("Verify New Window Functionality", () => {
+    // Intercept the window.open method
     cy.window().then((win) => {
       cy.stub(win, "open").as("newwincall");
     });
 
-    //Click on New Window button
+    // Click on the "New Window" button
     browserwindows.elements.newwindow().click();
 
-    //Cypress.sinon.match is a utility provided by Cypress, which are used to specify the expected arguments when stubbing or spying on functions.
-    //Cypress.sinon.match.string asserts that the stubbed window.open() method has been called at least once with a string argument.
+    // Assert that the window.open method was called with a URL string that contains "/sample"
     cy.get("@newwincall").should(
       "be.calledWith",
       Cypress.sinon.match("/sample")
     );
   });
 
-  it("TC - 03 Verify New Window Message Functionality", function () {
-    //Intercept the window.open method
+  it("Verify New Window Message Functionality", () => {
+    // Intercept the window.open method
     cy.window().then((win) => {
       cy.stub(win, "open").as("winmsg");
     });
 
-    //Click on New Window button
+    // Click on the "New Window Message" button
     browserwindows.elements.winmsg().click();
 
-    //Wait for the window.open call and assert that it was called
+    // Assert that the window.open method was called
     cy.get("@winmsg").should("be.called");
   });
 });
 
-describe("Demo QA -> Alerts", () => {
+// Describing the test suite for Alerts functionality
+describe("Alerts Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Alerts, Frame & Windows section
+    // Click on the "Alerts, Frame & Windows" section to navigate
     browserwindows.elements.alertsframewindows().should("be.visible").click();
 
-    //Click on Alerts
+    // Click on the "Alerts" option to open the correct page
     alert.elements.alerts_label().click();
 
-    //Assertion to check Header
+    // Assert that the header label is correct
     textbox.elements.header_label().should("have.text", "Alerts");
   });
 
-  it("TC - 01 Verify Alert Functionality", function () {
-    //Set the uncaught expection which is declared globally as true before running this testcase(only for negative when testcase should fail)
-    //Click on Alert button
+  it("Verify Alert Functionality", () => {
+    // Trigger the alert by clicking the alert button
     alert.elements.alert_msg().click();
 
+    // Listen for the alert window and assert the message content
     cy.on("window:alert", (message) => {
-      // Assertion on the alert message
       expect(message).to.equal("You clicked a button");
     });
   });
 
-  // it('TC - 02 Verify Alert after 5 second wait Functionality', function () {
-  //     // Click on Alert button
-  //     alert.elements.wait_alert().click();
-
-  //     // Wait for 5 seconds
-  //     cy.wait(5000);
-
-  //     // Set a flag to track if the expected alert message is received
-  //     let flag = false;
-
-  //     // Set up an event listener to catch the alert
-  //     cy.on('window:alert', (message) => {
-  //         // Assertion or custom logic based on the alert message
-  //         if (message == 'This walert appeared after 5 seconds') {
-  //             cy.log('The alert message is correct')
-  //             flag = true;
-  //         } else {
-  //             //expect(message).to.equal('This alert appeared after 5 seconds');
-  //             // Fail the test case if the expected alert message does not match
-  //             cy.fail('Incorrect alert message: ' + message);
-  //         }
-  //     }).then(() => {
-  //         // Fail the test case if the expected alert message was not received
-  //         if (!flag) {
-  //             cy.fail('Expected alert message was not received');
-  //         }
-  //     });
-  // })
-
-  it("TC - 02 Verify Alert after 5 second wait Functionality", function () {
-    // Stub the network for alerts generated
+  it("Verify Alert after 5 second wait Functionality", () => {
+    // Stub the window alert function to capture and assert the alert
     cy.window().then((win) => {
       cy.stub(win, "alert").as("alertmsg");
     });
 
-    //Click on alert button
+    // Click on the button that triggers an alert after 5 seconds
     alert.elements.wait_alert().click();
-    cy.wait(5000);
+    cy.wait(5000); // Wait for the alert to appear
 
-    // Assertion to check for alert result
+    // Assert that the alert was called with the expected message
     cy.get("@alertmsg").should(
       "be.calledWith",
       "This alert appeared after 5 seconds"
     );
   });
 
-  it("TC - 03 Verify OK button for Confirm Alert", function () {
-    // Click on confirm button
+  it("Verify OK button for Confirm Alert", () => {
+    // Click on the confirm button that triggers a confirmation dialog
     alert.elements.confirm_btn().click();
 
-    // Verify that the confirm alert is displayed and contains the expected message
+    // Listen for the confirm window and assert the message content
     cy.on("window:confirm", (confirmMessage) => {
       expect(confirmMessage).to.equal("Do you confirm action?");
-      //Click on OK button in prompt
+      // Click on the OK button in the confirm dialog
       return true;
     });
 
-    //Assertion to check - click on OK button
+    // Assert that the confirmation result displays "You selected Ok"
     alert.elements
       .confirm_result()
       .should("be.visible")
       .and("have.text", "You selected Ok");
   });
 
-  it("TC - 04 Verify Cancel button for Confirm Alert", function () {
-    // Click on confirm button
+  it("Verify Cancel button for Confirm Alert", () => {
+    // Click on the confirm button that triggers a confirmation dialog
     alert.elements.confirm_btn().click();
 
-    // Verify that the confirm alert is displayed and contains the expected message
+    // Listen for the confirm window and assert the message content
     cy.on("window:confirm", (confirmMessage) => {
       expect(confirmMessage).to.equal("Do you confirm action?");
-      //Click on cancel button in prompt
-      return !true;
+      // Click on the Cancel button in the confirm dialog
+      return false;
     });
 
-    //Assertion to check - Click on Cancel button
+    // Assert that the confirmation result displays "You selected Cancel"
     alert.elements
       .confirm_result()
       .should("be.visible")
       .and("have.text", "You selected Cancel");
   });
 
-  it("TC - 05 Verify Prompt Alert Functionality", function () {
-    //cy.window() command is used to access the global window object of the application under test.
-    //This command allows you to interact with properties and methods of the window object that are not directly accessible via DOM elements.
+  it("Verify Prompt Alert Functionality", () => {
+    // Access the window object and stub the prompt method to return a fixed value
     cy.window().then((win) => {
-      //Stub the window.prompt method to return a fixed value
       cy.stub(win, "prompt").returns("Avinabh");
     });
 
-    // Click on the prompt button
+    // Click on the prompt button to trigger the prompt dialog
     alert.elements.prompt_btn().click();
 
-    //Assertion to check prompt result
+    // Assert that the prompt result displays the entered text
     alert.elements
       .prompt_result()
       .should("be.visible")
@@ -1420,62 +1307,56 @@ describe("Demo QA -> Alerts", () => {
   });
 });
 
-describe("Demo QA -> Frames", () => {
+// Describing the test suite for Frames functionality
+describe("Frames Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Alerts, Frame & Windows section
+    // Click on the "Alerts, Frame & Windows" section to navigate
     browserwindows.elements.alertsframewindows().should("be.visible").click();
 
-    //Click on Frames
+    // Click on the "Frames" option to open the frames page
     frame.elements.frames_label().click();
 
-    //Assertion to check Header
+    // Assert that the header label is correct
     textbox.elements.header_label().should("have.text", "Frames");
+
+    // Wait added to ensure proper wait time for all the frames to load
+    cy.wait(3000);
   });
 
-  it("TC 01 - Verify Frames functionality", function () {
-    cy.wait(3000);
-
-    //Assert on width and height of first frame
+  it("Verify Frames functionality", () => {
+    // Assert on the width and height of the first frame
     frame.elements
       .frame1()
       .should("have.attr", "width", "500px")
       .and("have.attr", "height", "350px");
 
-    // Switch to the first iframe
+    // Switch to the first iframe and assert on its content
     frame.elements.frame1().then((iframe1) => {
       cy.wrap(iframe1)
         .should("have.prop", "contentDocument")
         .and("exist")
         .then((Doc_Content) => {
-          // Assert on the content inside the body of the iframe
+          // Assert that the body of the iframe contains the expected text
           cy.wrap(Doc_Content)
             .find("body")
             .should("contain.text", "This is a sample page");
         });
     });
 
-    //Assert on width and height of second frame
+    // Assert on the width and height of the second frame
     frame.elements
       .frame2()
       .should("have.attr", "width", "100px")
       .and("have.attr", "height", "100px");
 
-    //Switch to the second iframe
+    // Switch to the second iframe and assert on its content
     frame.elements.frame2().then((iframe2) => {
       cy.wrap(iframe2)
         .should("have.prop", "contentDocument")
         .and("exist")
         .then((Doc_Content) => {
-          //Assert on the content inside the body of the iframe
+          // Assert that the body of the iframe contains the expected text
           cy.wrap(Doc_Content)
             .find("body")
             .should("contain.text", "This is a sample page");
@@ -1484,49 +1365,40 @@ describe("Demo QA -> Frames", () => {
   });
 });
 
-describe("Demo QA -> Nested Frames", () => {
+// Describing the test suite for Nested Frames functionality
+describe("Nested Frames", function () {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Alerts, Frame & Windows section
+    // Click on the "Alerts, Frame & Windows" section to navigate
     browserwindows.elements.alertsframewindows().should("be.visible").click();
 
-    //Click on Nested Frames
+    // Click on the "Nested Frames" option to open the nested frames page
     nested_frames.elements.nested_frames_label().click();
 
-    //Assertion to check Header
+    // Assert that the header label is correct
     textbox.elements.header_label().should("have.text", "Nested Frames");
+
+    // Wait added to ensure proper wait time for all the frames to load
+    cy.wait(3000);
   });
 
-  it("TC 01 - Verify Nested Frames functionality", function () {
-    cy.wait(3000);
-
-    // Assert on first frame (parent)
+  it("Verify Nested Frames functionality", () => {
+    // Assert that the parent frame contains the expected text
     nested_frames.elements
       .parent_frame()
       .should("contain.text", "Parent frame");
 
-    // Assert that child frame is present inside the body of the parent frame
-    //nested_frames.elements.parent_frame().find('iframe[srcdoc="<p>Child Iframe</p>"]').should('be.visible');
-
+    // Find the child iframe within the parent frame and assert on its content
     nested_frames.elements
       .parent_frame()
       .find('iframe[srcdoc="<p>Child Iframe</p>"]')
       .should("be.visible")
       .then((cframe) => {
-        // Assert that the body of the child frame contains a Document
+        // Assert that the child iframe's document exists and contains the expected text
         cy.wrap(cframe)
           .should("have.prop", "contentDocument")
           .and("exist")
           .then((Doc_Content) => {
-            // Assert on the content inside the Document
             cy.wrap(Doc_Content)
               .find("body")
               .should("contain.text", "Child Iframe");
@@ -1535,103 +1407,91 @@ describe("Demo QA -> Nested Frames", () => {
   });
 });
 
-describe("Demo QA -> Modal Dialogs", () => {
+// Describing the test suite for Modal Dialogs functionality
+describe("Modal Dialogs Functionality", () => {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Alerts, Frame & Windows section
+    // Click on the "Alerts, Frame & Windows" section to navigate
     browserwindows.elements.alertsframewindows().should("be.visible").click();
 
-    //Click on Modal Dialogs
+    // Click on the "Modal Dialogs" option to open the modal dialogs page
     modal_dialogs.elements.modal_dialog_label().click();
 
-    //Assertion to check Header
+    // Assert that the header label is correct
     textbox.elements.header_label().should("have.text", "Modal Dialogs");
   });
 
-  it("TC 01 - Verify Small Modal Dialog functionality", function () {
-    //Click on small modal dialog
+  it("Verify Small Modal Dialog functionality", () => {
+    // Click on the small modal dialog button
     modal_dialogs.elements.small_modal_dialog_btn().click();
 
-    //Assertion to check modal dialog is visible
+    // Assert that the small modal dialog is visible
     modal_dialogs.elements.small_modal_dialog().should("be.visible");
 
-    // Assertion to check small dialog heading
+    // Assert that the small dialog heading is correct
     modal_dialogs.elements
       .small_dialog_head()
       .should("have.text", "Small Modal");
 
-    // Assertion to check small dialog content
+    // Assert that the small dialog content is correct
     modal_dialogs.elements
       .dialog_content()
       .should("have.text", "This is a small modal. It has very less content");
 
-    //Click on Close button
+    // Click on the Close button
     modal_dialogs.elements.close_small_btn().click();
 
-    // Assertion to check small modal dialog is closed
+    // Assert that the small modal dialog is closed
     modal_dialogs.elements.small_modal_dialog().should("not.exist");
   });
 
-  it("TC 02 - Verify Large Modal Dialog functionality", function () {
-    //Click on large modal dialog
+  it("Verify Large Modal Dialog functionality", () => {
+    // Click on the large modal dialog button
     modal_dialogs.elements.large_modal_dialog_btn().click();
 
-    //Assertion to check modal dialog is visible
+    // Assert that the large modal dialog is visible
     modal_dialogs.elements.large_modal_dialog().should("be.visible");
 
-    // Assertion to check large dialog heading
+    // Assert that the large dialog heading is correct
     modal_dialogs.elements
       .large_dialog_head()
       .should("have.text", "Large Modal");
 
-    // Assertion to check large dialog content
+    // Assert that the large dialog content contains "Lorem Ipsum"
     modal_dialogs.elements.dialog_content().should("contain", "Lorem Ipsum");
 
-    //Click on Close button
+    // Click on the Close button
     modal_dialogs.elements.close_large_btn().click();
 
-    // Assertion to check large modal dialog is closed
+    // Assert that the large modal dialog is closed
     modal_dialogs.elements.large_modal_dialog().should("not.exist");
   });
 });
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+///////////////////////////////////////////////////////////////////////////////////////////////////////
 
-describe("Demo QA -> Accordian", () => {
+// Describing the test suite for Accordian functionality
+describe("Accordian Functionality", () => {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Widgets section
+    // Click on the "Widgets" section to navigate
     accordian.elements.widgets_label().should("be.visible").click();
 
-    //Click on Accordian
+    // Click on the "Accordian" option to open the accordian page
     accordian.elements.accordian_label().click();
 
-    //Assertion to check Header
+    // Assert that the header label is correct
     textbox.elements.header_label().should("have.text", "Accordian");
   });
 
-  it("TC 01 - Verify first Accordian functionality", function () {
-    //Assertion to check first section
+  it("Verify first Accordian functionality", () => {
+    // Assert the visibility and text of the first accordion section header
     accordian.elements
       .section1_head()
       .should("be.visible")
       .and("have.text", "What is Lorem Ipsum?");
+
+    // Assert the visibility and content of the first accordion section body
     accordian.elements
       .section1_body()
       .should("be.visible")
@@ -1641,18 +1501,20 @@ describe("Demo QA -> Accordian", () => {
       );
   });
 
-  it("TC 02 - Verify second Accordian functionality", function () {
-    //Click on second accordian
+  it("Verify second Accordian functionality", () => {
+    // Click on the second accordion header to expand it
     accordian.elements.section2_head().click();
 
-    //First section should collapse
+    // Assert that the first section collapses
     accordian.elements.section1_body().should("not.be.visible");
 
-    //Assertion to check second section
+    // Assert the visibility and text of the second accordion section header
     accordian.elements
       .section2_head()
       .should("be.visible")
       .and("have.text", "Where does it come from?");
+
+    // Assert the visibility and content of the second accordion section body
     accordian.elements
       .section2_body()
       .should("be.visible")
@@ -1662,18 +1524,20 @@ describe("Demo QA -> Accordian", () => {
       );
   });
 
-  it("TC 03 - Verify third Accordian functionality", function () {
-    //Click on third accordian
+  it("Verify third Accordian functionality", () => {
+    // Click on the third accordion header to expand it
     accordian.elements.section3_head().click();
 
-    //First section should collapse
+    // Assert that the first section collapses
     accordian.elements.section1_body().should("not.be.visible");
 
-    //Assertion to check second section
+    // Assert the visibility and text of the third accordion section header
     accordian.elements
       .section3_head()
       .should("be.visible")
       .and("have.text", "Why do we use it?");
+
+    // Assert the visibility and content of the third accordion section body
     accordian.elements
       .section3_body()
       .should("be.visible")
@@ -1681,203 +1545,184 @@ describe("Demo QA -> Accordian", () => {
   });
 });
 
-describe("Demo QA -> Auto Complete", () => {
+// Describing the test suite for Auto Complete functionality
+describe("Auto Complete Functionality", () => {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Widgets section
+    // Click on the "Widgets" section to navigate
     accordian.elements.widgets_label().should("be.visible").click();
 
-    //Click on Auto Complete
+    // Click on the "Auto Complete" option to open the auto-complete page
     autocomplete.elements.autocomplete_label().click();
 
-    //Assertion to check Header
+    // Assert that the header label is correct
     textbox.elements.header_label().should("have.text", "Auto Complete");
   });
 
-  it("TC 01 - Enter multiple Colors using autocomplete", function () {
-    //Enter multiple colors
+  it("Enter multiple Colors using autocomplete", () => {
+    // Assert the initial instruction for multiple color input
     autocomplete.elements
       .multiple()
       .should("contain", "Type multiple color names");
 
-    //Call to add multiple colors function
+    // Call the function to add multiple colors
     autocomplete.add_multi_colors();
   });
 
-  it("TC 02 - Verify removing added multiple colors", function () {
-    //Call to add multiple colors function
+  it("Verify removing added multiple colors", () => {
+    // Call the function to add multiple colors
     autocomplete.add_multi_colors();
 
-    //variable to store number of added colors
+    // Variable to store the number of added colors
     const totalcolors = 5;
 
-    //Loop through to remove each color
+    // Loop through to remove each color
     for (let i = 0; i < totalcolors; i++) {
       autocomplete.elements.close_multi().eq(0).click();
     }
 
-    //Assert to check textbox is empty
+    // Assert that suggestions are not visible after removal
     autocomplete.elements.suggestions().should("not.exist");
 
     // Assert that the textbox is empty
     autocomplete.elements.multi_textbox().should("have.value", "");
   });
 
-  it("TC 03 - Enter single color", function () {
-    //Assert to check single color label
+  it("Enter single color", () => {
+    // Assert the initial instruction for single color input
     autocomplete.elements.single().should("contain", "Type single color name");
 
-    //Enter single color
+    // Enter a single color starting with "g"
     autocomplete.elements.single().type("g");
 
-    //Assert to check single color label
+    // Assert that suggestions contain "Magenta" and select it
     autocomplete.elements
       .suggestions()
       .contains("Magenta")
       .should("exist")
       .type("{enter}");
 
-    //Assert to check single color label contains entered color
+    // Assert that the single color textbox contains "Magenta"
     autocomplete.elements.single().should("contain", "Magenta");
 
-    //Enter anothersingle color
+    // Enter another single color starting with "b"
     autocomplete.elements.single().type("b");
 
-    //Assert to check single color label
+    // Assert that suggestions contain "Black" and select it
     autocomplete.elements
       .suggestions()
       .contains("Black")
       .should("exist")
       .type("{enter}");
 
-    //Assert to check single color label contains entered color
+    // Assert that the single color textbox contains "Black"
     autocomplete.elements.single().should("contain", "Black");
 
-    //Assert to check single color label does not contain previous color
+    // Assert that the single color textbox does not contain the previous color
     autocomplete.elements.single().should("not.contain", "Magenta");
   });
 });
 
-describe("Demo QA -> Date Picker", () => {
+// Describing the test suite for Date Picker functionality
+describe("Date Picker Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Widgets section
+    // Click on the "Widgets" section to navigate
     accordian.elements.widgets_label().should("be.visible").click();
 
-    //Click on Date Picker
+    // Click on the "Date Picker" option to open the date picker page
     datepicker.elements.datepicker_label().click();
 
-    //Assertion to check Header
+    // Assert that the header label is correct
     textbox.elements.header_label().should("have.text", "Date Picker");
   });
 
-  it("TC 01 - Verify Date Functionality", function () {
+  it("Verify Date Functionality", () => {
+    // Constants to store a date
     const yr = "2003";
     const mon = "March";
     const day = "16";
 
-    //Choose Date
+    // Choose the date picker field
     datepicker.elements.date().click();
 
-    //Select Year
+    // Select Year
     datepicker.elements.year().select(yr);
 
-    //Select Month
+    // Select Month
     datepicker.elements.month().select(mon);
 
-    //Click on Day
+    // Click on Day
     datepicker.elements.day().click();
 
+    // Assert that the date field shows the selected date
     datepicker.elements.date().should("have.value", "03/16/2003");
   });
 
-  it("TC 02 - Verify Date and Time Functionality", function () {
+  it("Verify Date and Time Functionality", () => {
+    // Constants to store a date
     const yr = "2015";
     const mon = "October";
     const day = "18";
 
-    //Choose Date and time field
+    // Choose the date and time picker field
     datepicker.elements.dateandtime().click();
 
-    //Click on year dropdown
+    // Click on the year dropdown
     datepicker.elements.year_dropdown().click();
 
-    //Click on scroll button for number of times
+    // Number of clicks to scroll to the desired year
     const clicks = 4;
 
-    //Click the navigation button the specified number of times
+    // Click the navigation button to scroll to the desired year
     for (let i = 0; i < clicks; i++) {
       datepicker.elements.year_scroll().click();
     }
 
-    //Click on the specific year from the dropdown list
+    // Click on the specific year from the dropdown list
     datepicker.elements.year_select().contains(yr).click();
 
-    //Click on Month dropdown
+    // Click on the month dropdown
     datepicker.elements.month_dropdown().click();
 
-    //Click on the specific month from the dropdown list
+    // Click on the specific month from the dropdown list
     datepicker.elements.month_select().contains(mon).click();
 
-    //Click on Day
+    // Click on Day
     datepicker.elements.day().click();
 
+    // Select the specific time
     datepicker.elements.time().contains("4:45").click();
 
+    // Assert that the date and time field shows the selected date and time
     datepicker.elements
       .dateandtime()
       .should("have.value", "October 18, 2015 4:45 AM");
   });
 });
 
-describe("Demo QA -> Slider", () => {
+// Describing the test suite for Slider functionality
+describe("Slider Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Widgets section
+    // Click on the "Widgets" section to navigate
     accordian.elements.widgets_label().should("be.visible").click();
 
-    //Click on Slider
+    // Click on the "Slider" option to open the slider page
     slider.elements.slider_label().click();
 
-    //Assertion to check Header
+    // Assert that the header label is correct
     textbox.elements.header_label().should("have.text", "Slider");
   });
 
-  it("TC 01 - Verify Slider Functionality", function () {
-    // Move the slider by setting its value
-    //slider.elements.range_slider().click();
+  it("Verify Slider Functionality", () => {
+    // Wait for 2 seconds to ensure all elements are loaded
     cy.wait(2000);
 
-    // Find the slider input element
-    //const sliderInput = cy.get('.range-slider');
-
-    // Set the value of the slider directly using invoke
+    // Set the value of the slider directly using the 'invoke' command
     slider.elements.range_slider().invoke("val", 75).trigger("change");
 
+    // Wait for 3 seconds to ensure the value is updated
     cy.wait(3000);
 
     // Get the value attribute of the slider input element
@@ -1885,46 +1730,36 @@ describe("Demo QA -> Slider", () => {
       .range_slider()
       .invoke("val")
       .then((value) => {
-        // Assert that the value retrieved matches 75
+        // Assert that the value retrieved from the slider matches 75
         expect(value).to.equal("75");
       });
-
-    // Assert that the same value is visible in the slider result textbox
-    //slider.elements.silder_result().should('have.value', '75', { timeout: 5000 });
   });
 });
 
-describe("Demo QA -> Progress Bar", () => {
+// Describing the test suite for Progress Bar functionality
+describe("Progress Bar Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Widgets section
+    // Click on the "Widgets" section to navigate
     accordian.elements.widgets_label().should("be.visible").click();
 
-    //Click on Progress Bar
+    // Click on the "Progress Bar" option to open the progress bar page
     progressbar.elements.progressbar_label().click();
   });
 
-  it("TC 01 - Verify Progress Bar UI", function () {
-    //Assertion to check Header
+  it("Verify Progress Bar UI", () => {
+    // Assert that the header label is correct
     textbox.elements.header_label().should("have.text", "Progress Bar");
 
-    //Assert that progress bar is visible
+    // Assert that the progress bar element is visible
     progressbar.elements.bar().should("be.visible");
 
-    //Assert that start stop button is clickable
+    // Assert that the start/stop button is clickable
     progressbar.elements.bar_btn().should("be.enabled");
   });
 
-  it("TC 02 - Verify Progress Bar Functionality", function () {
-    //Get the initial text of the progress bar
+  it("Verify Progress Bar Functionality", () => {
+    // Get the initial text of the progress bar
     let initialText;
     progressbar.elements
       .bar()
@@ -1932,19 +1767,20 @@ describe("Demo QA -> Progress Bar", () => {
       .then((text) => {
         initialText = text;
 
-        //Assert that progress is at 0% initially
+        // Assert that the progress bar starts at 0%
         progressbar.elements.bar().should("have.text", text);
       });
 
-    //Click on start button
+    // Click on the start button to begin progress
     progressbar.elements.bar_btn().click();
-    //Assert 'Start' button is changed to 'Stop' button
+
+    // Assert that the start button is now changed to "Stop"
     progressbar.elements.bar_btn().should("have.text", "Stop");
 
-    //Wait for 2.5 seconds
+    // Wait for 2.5 seconds to allow progress to move
     cy.wait(2500);
 
-    //Click on stop button
+    // Click on the stop button to halt progress
     progressbar.elements.bar_btn().click();
 
     // Get the text of the progress bar again
@@ -1952,13 +1788,13 @@ describe("Demo QA -> Progress Bar", () => {
       .bar()
       .invoke("text")
       .then((text) => {
-        // Assert that the text has changed, indicating that the progress bar is moving
+        // Assert that the text has changed, indicating progress was made
         expect(text).to.not.equal(initialText);
       });
   });
 
-  it("TC 03 - Verify Reset Progress Bar Functionality", function () {
-    //Get the initial text of the progress bar
+  it("Verify Reset Progress Bar Functionality", () => {
+    // Get the initial text of the progress bar
     let initialText;
     progressbar.elements
       .bar()
@@ -1967,9 +1803,10 @@ describe("Demo QA -> Progress Bar", () => {
         initialText = text;
       });
 
-    //Click on start button
+    // Click on the start button to begin progress
     progressbar.elements.bar_btn().click();
 
+    // Wait for 12 seconds to allow the progress to reach 100%
     cy.wait(12000);
 
     // Get the text of the progress bar again
@@ -1977,139 +1814,119 @@ describe("Demo QA -> Progress Bar", () => {
       .bar()
       .invoke("text")
       .then((text) => {
-        // Assert that the text has changed, indicating that the progress bar is moving
+        // Assert that the text shows 100%, indicating completion
         expect(text).to.equal("100%");
       });
 
-    //Assert 'Start' button is changed to 'Reset' button
+    // Assert that the start button is now changed to "Reset"
     progressbar.elements
       .reset_btn()
       .should("be.visible")
       .and("have.text", "Reset");
 
-    //Click on reset button
+    // Click on the reset button to reset progress
     progressbar.elements.reset_btn().click();
 
-    //Assert that progress is reset to 0%
+    // Assert that the progress is reset to 0%
     progressbar.elements.bar().should("have.text", "0%");
   });
 });
 
-describe("Demo QA -> Tabs", () => {
+// Describing the test suite for Tabs functionality
+describe("Tabs Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Widgets section
+    // Click on the "Widgets" section to navigate
     accordian.elements.widgets_label().should("be.visible").click();
 
-    //Click on Tabs
+    // Click on the "Tabs" option to open the tabs page
     tab.elements.tab_label().click();
   });
 
-  it("TC 01 - Verify Tabs UI", function () {
-    //Assertion to check Header
+  it("Verify Tabs UI", () => {
+    // Assert that the header label is correct
     textbox.elements.header_label().should("have.text", "Tabs");
 
-    //Assert only 'What' tab is visible
+    // Assert that the 'What' tab is selected and its content is visible
     tab.elements.what_tab().should("have.attr", "aria-selected", "true");
-    //Assert 'What' tab content is visible
     tab.elements.what_content().should("be.visible");
 
-    //Assert only 'origin' tab is not visible
+    // Assert that the 'origin' tab is not selected and its content is not visible
     tab.elements.origin_tab().should("have.attr", "aria-selected", "false");
-    //Assert 'origin' tab content is not visible
     tab.elements.origin_content().should("not.be.visible");
 
-    //Assert only 'use' tab is not visible
+    // Assert that the 'use' tab is not selected and its content is not visible
     tab.elements.use_tab().should("have.attr", "aria-selected", "false");
-    //Assert 'use' tab content is not visible
     tab.elements.use_content().should("not.be.visible");
 
-    //Assert only 'more' tab is disabled
+    // Assert that the 'more' tab is disabled and its content is not visible
     tab.elements.more_tab().should("have.attr", "aria-disabled", "true");
-    //Assert 'more' tab content is not visible
     tab.elements.more_content().should("not.be.visible");
   });
 
-  it("TC 02 - Verify Tabs Functionality", function () {
-    //Click on 'Origin'tab
+  it("Verify Tabs Functionality", () => {
+    // Click on the 'Origin' tab to view its content
     tab.elements.origin_tab().click();
 
-    //Assert 'origin' tab is visible
+    // Assert that the 'origin' tab is selected and its content is visible
     tab.elements.origin_tab().should("have.attr", "aria-selected", "true");
-    //Assert 'origin' tab content is visible
     tab.elements.origin_content().should("be.visible");
 
-    //Assert only 'What' tab is not visible
+    // Assert that the 'What' tab is not selected and its content is not visible
     tab.elements.what_tab().should("have.attr", "aria-selected", "false");
-    //Assert 'What' tab content is not visible
     tab.elements.what_content().should("not.be.visible");
   });
 });
 
-describe("Demo QA -> Tool Tips", () => {
+// Describing the test suite for Tool Tips functionality
+describe("Tool Tips Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Widgets section
+    // Click on the "Widgets" section to navigate
     accordian.elements.widgets_label().should("be.visible").click();
 
-    //Click on Tool Tips
+    // Click on the "Tool Tips" option to open the tool tips page
     tooltips.elements.tooltip_label().click();
   });
 
-  it("TC 01 - Verify Tool Tips UI", function () {
-    //Assertion to check Header
+  it("Verify Tool Tips UI", () => {
+    // Assert that the header label is correct
     textbox.elements.header_label().should("have.text", "Tool Tips");
 
-    //Assert button is visible
+    // Assert that the button for tool tips is visible
     tooltips.elements.tip_btn().should("be.visible");
 
-    //Assert tetxfield is visible
+    // Assert that the text field for tool tips is visible
     tooltips.elements.tip_textfield().should("be.visible");
 
-    //Assert text is visible
-    tooltips.elements.tip_text().find("a[href]").should("have.length", 2); //Check there are exactly two links in text
+    // Assert that there are exactly two links in the tool tips text
+    tooltips.elements.tip_text().find("a[href]").should("have.length", 2);
   });
 
-  it("TC 02 - Verify Tool Tip function for button", function () {
-    //Hover mouse over the button
+  it("Verify Tool Tip function for button", () => {
+    // Hover over the button to trigger the tool tip
     tooltips.elements.tip_btn().trigger("mouseover").invoke("show");
 
-    //Assert tooltip is visible for button
+    // Assert that the tool tip is visible and contains the correct text
     tooltips.elements
       .tooltip_result()
       .should("be.visible")
       .and("have.text", "You hovered over the Button");
   });
 
-  it("TC 03 - Verify Tool Tip function for textfield", function () {
-    //Hover mouse over the textfield
+  it("Verify Tool Tip function for textfield", () => {
+    // Hover over the text field to trigger the tool tip
     tooltips.elements.tip_textfield().trigger("mouseover").invoke("show");
 
-    //Assert tooltip is visible for tetxfield
+    // Assert that the tool tip is visible and contains the correct text
     tooltips.elements
       .tooltip_result()
       .should("be.visible")
       .and("have.text", "You hovered over the text field");
   });
 
-  it("TC 04 - Verify Tool Tip function for text", function () {
-    //Hover mouse over the first link in text
+  it("Verify Tool Tip function for text", () => {
+    // Hover over the first link in the tool tips text to trigger the tool tip
     tooltips.elements
       .tip_text()
       .find("a[href]")
@@ -2117,13 +1934,13 @@ describe("Demo QA -> Tool Tips", () => {
       .trigger("mouseover")
       .invoke("show");
 
-    //Assert tooltip is visible for first link in text
+    // Assert that the tool tip is visible and contains the correct text for the first link
     tooltips.elements
       .tooltip_result()
       .should("be.visible")
       .and("have.text", "You hovered over the Contrary");
 
-    //Hover mouse over the second link in text
+    // Hover over the second link in the tool tips text to trigger the tool tip
     tooltips.elements
       .tip_text()
       .find("a[href]")
@@ -2131,8 +1948,7 @@ describe("Demo QA -> Tool Tips", () => {
       .trigger("mouseover")
       .invoke("show");
 
-    //Assert tooltip is visible for second link in text
-    //contain is only used because both tooltips are visible together
+    // Assert that the tool tip is visible and contains the correct text for the second link
     tooltips.elements
       .tooltip_result()
       .should("be.visible")
@@ -2140,67 +1956,55 @@ describe("Demo QA -> Tool Tips", () => {
   });
 });
 
-describe("Demo QA -> Menu", () => {
+// Describing the test suite for Menu functionality
+describe("Menu Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Widgets section
+    // Click on the "Widgets" section to navigate
     accordian.elements.widgets_label().should("be.visible").click();
 
-    //Click on Menu
+    // Click on the "Menu" option to open the menu page
     menu.elements.menu_label().click();
 
-    //Assertion to check Header
+    // Assertion to check the header label
     textbox.elements.header_label().should("have.text", "Menu");
   });
 
-  it("TC 01 - Verify Menu Functionality", function () {
+  it("Verify Menu Functionality", () => {
+    // Wait for 2 seconds to ensure the page is fully loaded
     cy.wait(2000);
 
+    // Locate and interact with nested menu items
     menu.elements
       .menu_id()
-      .contains("a", "Main Item 2") //Locate the element containing "Sub Sub Item 1"
+      .contains("a", "Main Item 2") // Locate the element containing "Main Item 2"
       .parent() // Move up to the parent <li> element
       .find("a") // Find the child <a> elements within the parent <li>
-      .contains("SUB SUB LIST »") //Locate the element containing "SUB SUB LIST"
+      .contains("SUB SUB LIST »") // Locate the element containing "SUB SUB LIST"
       .parent() // Move up to the parent <li> element
       .find("a") // Find the child <a> elements within the parent <li>
       .contains("Sub Sub Item 1") // Locate the link for "Sub Sub Item 1"
-      .should("exist") //Assert to check sub sub item 1 exists
-      .click({ force: true }); // Click on the link
+      .should("exist") // Assert that "Sub Sub Item 1" exists
+      .click({ force: true }); // Click on the link with force to ensure it clicks
   });
 });
 
-describe("Demo QA -> Select Menu", () => {
+// Describing the test suite for Select Menu functionality
+describe("Select Menu Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Widgets section
+    // Click on the "Widgets" section to navigate
     accordian.elements.widgets_label().should("be.visible").click();
 
-    //Click on Select Menu
+    // Click on the "Select Menu" option to open the select menu page
     selectmenu.elements.selectmenu_label().click();
   });
 
-  it("TC 01 - Verify Select Menu UI", function () {
-    //Assertion to check Header
+  it("Verify Select Menu UI", () => {
+    // Assertion to check the header label
     textbox.elements.header_label().should("have.text", "Select Menu");
 
-    //Assert Label names are correctly visible in menu section
+    // Assert that various label names are correctly visible in the menu section
     selectmenu.elements
       .entire_menu()
       .should("contain", "Select Value")
@@ -2209,33 +2013,25 @@ describe("Demo QA -> Select Menu", () => {
       .and("contain", "Multiselect drop down")
       .and("contain", "Standard multi select");
 
-    //Assertion on Group-value dropdown
+    // Assert visibility of various dropdown elements
     selectmenu.elements.group_opt().should("be.visible");
-
-    //Assertion on select one dropdown
     selectmenu.elements.select_one().should("be.visible");
-
-    //Assertion on Old Style Select Menu
     selectmenu.elements.old_select().should("be.visible");
-
-    //Assertion on Multiselect dropdown
     selectmenu.elements.multi_select().should("be.visible");
-
-    //Assertion on Standard Multiselect
     selectmenu.elements.standard_select().should("be.visible");
   });
 
-  it("TC 02 - Verify Select Value dropdown functionality", function () {
-    //Click on select value dropdown
+  it("Verify Select Value dropdown functionality", () => {
+    // Click on the "Select Value" dropdown
     selectmenu.elements
       .group_opt()
-      .invoke("css", "overflow", "visible")
+      .invoke("css", "overflow", "visible") // Make sure dropdown is visible
       .click();
 
-    //Assert select value dropdown menu is visible
+    // Assert that the dropdown menu is visible
     selectmenu.elements.dropdown_menu().should("be.visible");
 
-    //Assert dropdown itself contains two groups
+    // Assert that the dropdown contains two groups
     selectmenu.elements
       .dropdown_group1()
       .should("be.visible")
@@ -2245,127 +2041,118 @@ describe("Demo QA -> Select Menu", () => {
       .should("be.visible")
       .and("contain.text", "Group 2");
 
-    //Click on an option in dropdown menu
+    // Click on an option within the dropdown menu
     selectmenu.elements.dropdown_menu().contains("A root option").click();
 
-    //Assert selected option visible in select value dropdown
+    // Assert that the selected option is displayed in the dropdown
     selectmenu.elements.group_opt().should("contain", "A root option");
   });
 
-  it("TC 03 - Verify Select One dropdown functionality", function () {
-    //Click on select one dropdown
+  it("Verify Select One dropdown functionality", () => {
+    // Click on the "Select One" dropdown
     selectmenu.elements.select_one().click();
 
-    //Assert select one dropdown menu is visible
+    // Assert that the dropdown menu is visible
     selectmenu.elements.dropdown_menu().should("be.visible");
 
-    //Assert dropdown itself contains two groups
+    // Assert that the dropdown contains the expected heading
     selectmenu.elements
       .select_dropdown_heading()
       .should("be.visible")
       .and("contain", "Pick one title");
 
-    //Click on an option in dropdown menu
+    // Click on an option within the dropdown menu
     selectmenu.elements.dropdown_menu().contains("Prof.").click();
 
-    //Assert selected option visible in select one dropdown
+    // Assert that the selected option is displayed in the dropdown
     selectmenu.elements.select_one().should("contain", "Prof.");
   });
 
-  it("TC 04 - Verify Old Style Select Menu functionality", function () {
-    //Click on Old Style Select Menu
+  it("Verify Old Style Select Menu functionality", () => {
+    // Click on the "Old Style Select Menu" and select an option
     selectmenu.elements.old_select().select("White");
 
-    //Assert selected option visible in Old Style Select Menu
+    // Assert that the selected option is displayed in the "Old Style Select Menu"
     selectmenu.elements.old_select().should("contain", "White");
   });
 
-  it("TC 05 - Verify Multiselect dropdown functionality", function () {
-    //Click on Multiselect dropdown
+  it("Verify Multiselect dropdown functionality", () => {
+    // Click on the "Multiselect" dropdown
     selectmenu.elements.multi_select().click();
 
-    //Assert Multiselect dropdown menu is visible
+    // Assert that the dropdown menu is visible
     selectmenu.elements.dropdown_menu().should("be.visible");
 
-    //list for colors select
+    // List of colors to select
     const colors = ["Red", "Blue", "Black", "Green"];
 
-    //Run loop to slect multiple options from dropdown
-    colors.forEach((elements) => {
-      selectmenu.elements.dropdown_menu().contains(elements).click();
+    // Select multiple options from the dropdown
+    colors.forEach((color) => {
+      selectmenu.elements.dropdown_menu().contains(color).click();
     });
 
-    //Assert each color is selected
+    // Assert that each color is selected
     cy.wrap(colors).each((color) => {
       selectmenu.elements.multi_select().should("contain", color);
     });
   });
 
-  it("TC 06 - Verify Standard Multiselect functionality", function () {
-    //Select multiple options by using select
+  it("Verify Standard Multiselect functionality", () => {
+    // Select multiple options using the standard multiselect
     selectmenu.elements
       .standard_select()
       .select(["Volvo", "Saab", "Audi"], { multiple: true });
   });
 });
 
-//\\\\\\\\\\\\\\\\//\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\//\\\\\\\\\\\\\\\\\\\\\\\\\//\\\\\\\\\\\\\\\\\\\//\\\\\\\\\\\\\\\\\\\
+/////////////////////////////////////////////////////////////////////////////////////////
 
-describe("Demo QA -> Sortable", () => {
+// Describing the test suite for Sortable functionality
+describe("Sortable Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Interactions section
+    // Click on the "Interactions" section to navigate
     sortable.elements.interactions_label().should("be.visible").click();
 
-    //Click on Sortable
+    // Click on the "Sortable" option to open the sortable page
     sortable.elements.sortable_label().click();
   });
 
-  it("TC 01 - Verify Sortable UI", function () {
-    //Assertion to check Header
+  it("Verify Sortable UI", () => {
+    // Assertion to check the header label
     textbox.elements.header_label().should("have.text", "Sortable");
 
-    //Assert List Tab is visible
+    // Assert that both List and Grid tabs are visible
     sortable.elements.list_tab().should("be.visible");
-
-    //Assert Grid Tab is visible
     sortable.elements.gird_tab().should("be.visible");
 
-    //Assert List is visible
+    // Assert that the List section is visible
     sortable.elements.sort_list().should("be.visible");
 
-    //Define list of all numbers
+    // Define list of numbers expected in the sortable list
     const numbers = ["One", "Two", "Three", "Four", "Five", "Six"];
 
-    //Assert List contains One to Six elements
+    // Assert that each number from One to Six is present in the list
     cy.wrap(numbers).each((num) => {
       sortable.elements.sort_list().should("contain", num);
     });
   });
 
-  it("TC 02 - Verify Sortable List Functionality", function () {
-    //Define list of all numbers
+  it("Verify Sortable List Functionality", () => {
+    // Define list of numbers for testing
     const numbers = ["One", "Two", "Three", "Four", "Five", "Six"];
 
-    //Rearrange elements in reverse order
+    // Rearrange elements in reverse order
     for (let i = 0; i < numbers.length - 1; i++) {
-      //Drag the current element to the last position
-      sortable.elements.sort_list().contains(numbers[i]).trigger("mousedown"); //Mouse down on the current element
+      // Drag the current element to the last position
+      sortable.elements.sort_list().contains(numbers[i]).trigger("mousedown"); // Mouse down on the current element
       sortable.elements
         .sort_list()
         .contains("Six")
         .trigger("mousemove")
-        .trigger("mouseup"); //Mouse move and mouse up on the last element
+        .trigger("mouseup"); // Mouse move and mouse up on the last element
 
-      //Assert that the order of elements has been rearranged
+      // Assert that the order of elements has been rearranged correctly
       sortable.elements
         .list_num()
         .eq(0)
@@ -2373,12 +2160,12 @@ describe("Demo QA -> Sortable", () => {
     }
   });
 
-  it("TC 03 - Verify Sortable Grid Functionality", function () {
-    //Switch the tab to Grid section
+  it("Verify Sortable Grid Functionality", () => {
+    // Switch the tab to Grid section
     sortable.elements.gird_tab().click();
-    cy.wait(1000);
+    cy.wait(1000); // Wait for the transition to complete
 
-    //Define list of all numbers
+    // Define list of numbers for testing
     const numbers = [
       "One",
       "Two",
@@ -2391,143 +2178,127 @@ describe("Demo QA -> Sortable", () => {
       "Nine",
     ];
 
-    //Rearrange elements in reverse order
+    // Rearrange elements in reverse order
     for (let i = 0; i < numbers.length - 1; i++) {
-      //Drag the current element to the last position
+      // Drag the current element to the last position
       sortable.elements
         .sort_grid()
         .contains(numbers[i])
-        .trigger("mousedown", { which: 1 }); //Mouse down on the current element
+        .trigger("mousedown", { which: 1 }); // Mouse down on the current element
       sortable.elements
         .sort_grid()
         .contains("Nine")
         .trigger("mousemove")
-        .trigger("mouseup"); //Mouse move and mouse up on the last element
+        .trigger("mouseup"); // Mouse move and mouse up on the last element
 
-      cy.wait(500);
-      //Assert that the order of elements has been rearranged
+      cy.wait(500); // Wait for the rearrangement to complete
+      // Assert that the order of elements has been rearranged correctly
       sortable.elements
         .list_num()
         .eq(6)
-        .should("contain", numbers[i + 1]); //eq is set to 6 because it contains total 15 elements(including list & grid)
+        .should("contain", numbers[i + 1]); // eq is set to 6 because there are total 15 elements (including list & grid)
     }
   });
 });
 
-describe("Demo QA -> Selectable", () => {
+// Describing the test suite for Selectable functionality
+describe("Selectable Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Interactions section
+    // Click on the "Interactions" section to navigate
     sortable.elements.interactions_label().should("be.visible").click();
 
-    //Click on Selectable
+    // Click on the "Selectable" option to open the selectable page
     selectable.elements.selectable_label().click();
   });
 
-  it("TC 01 - Verify Selectable UI", function () {
-    //Assertion to check Header
+  it("Verify Selectable UI", () => {
+    // Assertion to check the header label
     textbox.elements.header_label().should("have.text", "Selectable");
 
-    //Assert List Tab is visible
+    // Assert that both List and Grid tabs are visible
     selectable.elements.list_tab().should("be.visible");
-
-    //Assert Grid Tab is visible
     selectable.elements.gird_tab().should("be.visible");
 
-    //Assert List is visible
+    // Assert that the List section is visible
     selectable.elements.sort_list().should("be.visible");
   });
 
-  it("TC 02 - Verify Selectable List Functionality", function () {
-    //Loop through to select elements in list
+  it("Verify Selectable List Functionality", () => {
+    // Loop through to select elements in the list
     for (let i = 1; i <= 3; i++) {
       selectable.elements
         .options_list()
         .eq(i)
         .click()
-        .should("have.css", "background-color", "rgb(0, 123, 255)");
+        .should("have.css", "background-color", "rgb(0, 123, 255)"); // Assert that the background color changes to blue
     }
 
-    //Loop through again to deselect elements in list
+    // Loop through again to deselect elements in the list
     for (let i = 1; i <= 3; i++) {
       selectable.elements
         .options_list()
         .eq(i)
         .click()
-        .should("have.css", "background-color", "rgb(255, 255, 255)");
+        .should("have.css", "background-color", "rgb(255, 255, 255)"); // Assert that the background color changes back to white
     }
   });
 
-  it("TC 03 - Verify Selectable Grid Functionality", function () {
-    //Switch the tab to Grid section
+  it("Verify Selectable Grid Functionality", () => {
+    // Switch the tab to Grid section
     sortable.elements.gird_tab().click();
-    cy.wait(1000);
+    cy.wait(1000); // Wait for the transition to complete
 
-    //Loop through to select elements in list
+    // Loop through to select elements in the grid
     for (let i = 6; i < 12; i++) {
       selectable.elements
         .options_list()
         .eq(i)
         .click()
-        .should("have.css", "background-color", "rgb(0, 123, 255)");
+        .should("have.css", "background-color", "rgb(0, 123, 255)"); // Assert that the background color changes to blue
     }
 
-    //Loop through again to deselect elements in list
+    // Loop through again to deselect elements in the grid
     for (let i = 6; i < 12; i++) {
       selectable.elements
         .options_list()
         .eq(i)
         .click()
-        .should("have.css", "background-color", "rgb(255, 255, 255)");
+        .should("have.css", "background-color", "rgb(255, 255, 255)"); // Assert that the background color changes back to white
     }
   });
 });
 
-describe("Demo QA -> Resizable", () => {
+// Describing the test suite for Resizable functionality
+describe("Resizable Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Interactions section
+    // Click on the "Interactions" section to navigate
     sortable.elements.interactions_label().should("be.visible").click();
 
-    //Click on Resizable
+    // Click on the "Resizable" option to open the resizable page
     resize.elements.resizable_label().click();
   });
 
-  it("TC 01 - Verify Resizable UI", function () {
-    //Assertion to check Header
+  it("Verify Resizable UI", () => {
+    // Assertion to check the header label
     textbox.elements.header_label().should("have.text", "Resizable");
 
-    //Assert restricted resizable box is visible
+    // Assert that the restricted resizable box is visible
     resize.elements.restrict_box().should("be.visible");
 
-    //Assert no restriction box is visible
+    // Assert that the unrestricted resizable box is visible
     resize.elements.unrestricted_box().should("be.visible");
   });
 
-  it("TC 02 - Verify restricted resizable functionality", function () {
-    //Assert to check current width and height
+  it("Verify restricted resizable functionality", () => {
+    // Assert initial width and height of the restricted box
     resize.elements
       .restrict_box()
       .should("have.css", "width", "200px")
       .and("have.css", "height", "200px");
 
-    //Resize the element to its minimum width and height
+    // Resize the element to its minimum width and height
     resize.elements
       .resize_cursor()
       .eq(0)
@@ -2535,13 +2306,13 @@ describe("Demo QA -> Resizable", () => {
       .trigger("mousemove", { clientX: 0, clientY: 0 })
       .trigger("mouseup");
 
-    //Assert to check width and height set to minimum
+    // Assert width and height are set to minimum
     resize.elements
       .restrict_box()
       .should("have.css", "width", "150px")
       .and("have.css", "height", "150px");
 
-    //Resize the element to its maximum width and height
+    // Resize the element to its maximum width and height
     resize.elements
       .resize_cursor()
       .eq(0)
@@ -2549,58 +2320,66 @@ describe("Demo QA -> Resizable", () => {
       .trigger("mousemove", { clientX: 9999, clientY: 9999 })
       .trigger("mouseup");
 
-    //Assert to check width and height set to minimum
+    // Assert width and height are set to maximum
     resize.elements
       .restrict_box()
       .should("have.css", "width", "500px")
       .and("have.css", "height", "300px");
   });
 
-  it("TC 03 - Verify unrestricted resizable functionality", function () {
-    //Assert to check current width and height
+  it("Verify unrestricted resizable functionality", () => {
+    // Assert initial width and height of the unrestricted box
     resize.elements
       .unrestricted_box()
       .should("have.css", "width", "200px")
       .and("have.css", "height", "200px");
 
-    //Resize the element to any width and height
+    // Resize the element to any width and height
     resize.elements
       .resize_cursor()
       .eq(1)
       .trigger("mousedown", { which: 1 })
       .trigger("mousemove", { clientX: 951, clientY: 1423 })
       .trigger("mouseup")
-      .then((values) => {
-        //Assert to check width and height is changed/not same
-        expect(values).to.have.css("width").not.eq("200px");
-        expect(values).to.have.css("height").not.eq("200px");
+      .then(() => {
+        // Assert that the width and height have changed from their initial values
+        resize.elements
+          .unrestricted_box()
+          .should("have.css", "width")
+          .not.eq("200px");
+        resize.elements
+          .unrestricted_box()
+          .should("have.css", "height")
+          .not.eq("200px");
       });
   });
 });
 
-describe("Demo QA -> Droppable", () => {
+// Describing the test suite for Droppable functionality
+describe("Droppable Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
+    // Call to ignore_ad function to handle any ads on the page
     functions.ignore_ad();
 
-    //Set screen size
+    // Set the screen size to 1920x1080 for consistency
     cy.viewport(1920, 1080);
 
-    //Visit the demoQA website
+    // Visit the DemoQA website
     cy.visit("https://demoqa.com/");
 
-    //Click on Interactions section
+    // Click on the "Interactions" section to navigate
     sortable.elements.interactions_label().should("be.visible").click();
 
-    //Click on Droppable
+    // Click on the "Droppable" option to open the droppable page
     dropp.elements.droppable_label().click();
   });
 
-  it("TC 01 - Verify Droppable UI", function () {
-    //Assertion to check Header
+  it("Verify Droppable UI", () => {
+    // Assertion to check the header label
     textbox.elements.header_label().should("have.text", "Droppable");
 
-    //Assert to check all tab labels
+    // Assert all tab labels are visible
     dropp.elements.simple_tab().should("be.visible").and("contain", "Simple");
     dropp.elements.accept_tab().should("be.visible").and("contain", "Accept");
     dropp.elements
@@ -2612,15 +2391,15 @@ describe("Demo QA -> Droppable", () => {
       .should("be.visible")
       .and("contain", "Revert Draggable");
 
-    //Assert Drag box
+    // Assert the drag box is visible with the correct text
     dropp.elements.dragbox().should("be.visible").and("contain", "Drag me");
 
-    //Assert Drop box
+    // Assert the drop box is visible with the correct text
     dropp.elements.dropbox().should("be.visible").and("contain", "Drop here");
   });
 
-  it("TC 02 - Verify Single droppable functionality", function () {
-    //Drag and drop the element into dropbox
+  it("Verify Single droppable functionality", () => {
+    // Drag and drop the drag box into the drop box
     dropp.elements.dragbox().trigger("mousedown", { which: 1 });
     dropp.elements
       .dropbox()
@@ -2628,9 +2407,9 @@ describe("Demo QA -> Droppable", () => {
       .trigger("mousemove")
       .trigger("mouseup", { force: true });
 
-    cy.wait(2000);
+    cy.wait(2000); // Wait for the drop action to complete
 
-    //Assert box is dropped into box and color is changed
+    // Assert the drop box text and background color change
     dropp.elements
       .dropbox()
       .eq(0)
@@ -2638,12 +2417,12 @@ describe("Demo QA -> Droppable", () => {
       .and("have.css", "background-color", "rgb(70, 130, 180)");
   });
 
-  it("TC 03 - Verify Acceptable box functionality", function () {
-    //Switch to accept tab
+  it("Verify Acceptable box functionality", () => {
+    // Switch to the "Accept" tab
     dropp.elements.accept_tab().click();
     cy.wait(1000);
 
-    //Drag and drop the Acceptbox into dropbox
+    // Drag and drop the acceptable box into the drop box
     dropp.elements.acceptbox().trigger("mousedown", { which: 1 });
     dropp.elements
       .dropbox()
@@ -2651,7 +2430,7 @@ describe("Demo QA -> Droppable", () => {
       .trigger("mousemove")
       .trigger("mouseup", { force: true });
 
-    //Assert box is dropped into box and color is changed
+    // Assert the drop box text and background color change
     dropp.elements
       .dropbox()
       .eq(1)
@@ -2659,12 +2438,12 @@ describe("Demo QA -> Droppable", () => {
       .and("have.css", "background-color", "rgb(70, 130, 180)");
   });
 
-  it("TC 04 - Verify not acceptable box functionality", function () {
-    //Switch to accept tab
+  it("Verify not acceptable box functionality", () => {
+    // Switch to the "Accept" tab
     dropp.elements.accept_tab().click();
     cy.wait(1000);
 
-    //Drag and drop the Acceptbox into dropbox
+    // Drag and drop the non-acceptable box into the drop box
     dropp.elements.noacceptbox().trigger("mousedown", { which: 1 });
     dropp.elements
       .dropbox()
@@ -2672,7 +2451,7 @@ describe("Demo QA -> Droppable", () => {
       .trigger("mousemove")
       .trigger("mouseup", { force: true });
 
-    //Assert element is not accepted in drop box
+    // Assert that the non-acceptable box is not accepted in the drop box
     dropp.elements
       .dropbox()
       .eq(1)
@@ -2680,19 +2459,19 @@ describe("Demo QA -> Droppable", () => {
       .and("not.have.css", "background-color", "rgb(70, 130, 180)");
   });
 
-  it("TC 05 - Verify no greed prevent propogation functionality", function () {
-    //Switch to prevent propogation tab
+  it("Verify prevent propagation functionality", () => {
+    // Switch to the "Prevent Propagation" tab
     dropp.elements.prevent_tab().click();
     cy.wait(1000);
 
-    //Drag and drop box into No greed dropbox
+    // Drag and drop the greed box into the no-greed drop box
     dropp.elements.greed_dragbox().trigger("mousedown", { which: 1 });
     dropp.elements
       .nogreed_innerbox()
       .trigger("mousemove")
       .trigger("mouseup", { force: true });
 
-    //Assert box is dropped in no greed(parent and inner both) dropbox and color & text is changed
+    // Assert that the box is dropped in both parent and inner drop boxes and text and color change
     dropp.elements
       .nogreedbox()
       .should("contain", "Dropped!")
@@ -2703,16 +2482,16 @@ describe("Demo QA -> Droppable", () => {
       .and("have.css", "background-color", "rgb(70, 130, 180)");
   });
 
-  it("TC 06 - Verify Revert Draggable functionality", function () {
-    //Switch to Revert Draggable tab
+  it("Verify Revert Draggable functionality", () => {
+    // Switch to the "Revert Draggable" tab
     dropp.elements.revert_tab().click();
     cy.wait(1000);
 
-    //Get the initial position of the draggable element
+    // Get the initial position of the revert box
     dropp.elements.revertbox().then((box) => {
       const initial_pos = box.position();
 
-      //Drag and drop revert box into dropbox
+      // Drag and drop the revert box into the drop box
       dropp.elements.revertbox().trigger("mousedown", { which: 1 });
       dropp.elements
         .dropbox()
@@ -2720,32 +2499,32 @@ describe("Demo QA -> Droppable", () => {
         .trigger("mousemove")
         .trigger("mouseup", { force: true });
 
-      cy.wait(1000);
+      cy.wait(1000); // Wait for the drop action to complete
 
-      //Assert box is dropped in dropbox
+      // Assert the drop box text and color change
       dropp.elements
         .dropbox()
         .eq(2)
         .should("have.text", "Dropped!")
         .and("have.css", "background-color", "rgb(70, 130, 180)");
 
-      //Assert that the draggable element has reverted back to its initial position
+      // Assert that the revert box has returned to its initial position
       dropp.elements.revertbox().then((box) => {
-        expect(box.position()).to.deep.equal(initial_pos); //deep.equal is used to deeply compare two objects to check if their contents are equal.
+        expect(box.position()).to.deep.equal(initial_pos); // Use deep.equal for object comparison
       });
     });
   });
 
-  it("TC 07 - Verify No Revert Draggable functionality", function () {
-    //Switch to Revert Draggable tab
+  it("Verify No Revert Draggable functionality", () => {
+    // Switch to the "Revert Draggable" tab
     dropp.elements.revert_tab().click();
     cy.wait(1000);
 
-    //Get the initial position of the draggable element
+    // Get the initial position of the no-revert box
     dropp.elements.norevertbox().then((box) => {
       const initial_pos = box.position();
 
-      //Drag and drop revert box into dropbox
+      // Drag and drop the no-revert box into the drop box
       dropp.elements.norevertbox().trigger("mousedown", { which: 1 });
       dropp.elements
         .dropbox()
@@ -2753,46 +2532,39 @@ describe("Demo QA -> Droppable", () => {
         .trigger("mousemove")
         .trigger("mouseup", { force: true });
 
-      cy.wait(1000);
+      cy.wait(1000); // Wait for the drop action to complete
 
-      //Assert box is dropped in dropbox
+      // Assert the drop box text and color change
       dropp.elements
         .dropbox()
         .eq(2)
         .should("have.text", "Dropped!")
         .and("have.css", "background-color", "rgb(70, 130, 180)");
 
-      //Assert that the draggable element has not reverted back to its initial position
+      // Assert that the no-revert box has not returned to its initial position
       dropp.elements.norevertbox().then((box) => {
-        expect(box.position()).not.to.deep.equal(initial_pos); //deep.equal is used to deeply compare two objects to check if their contents are equal.
+        expect(box.position()).not.to.deep.equal(initial_pos); // Use deep.equal for object comparison
       });
     });
   });
 });
 
-describe("Demo QA -> Dragabble", () => {
+// Describing the test suite for Draggable functionality
+describe("Draggable Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Interactions section
+    // Click on the "Interactions" section to navigate
     sortable.elements.interactions_label().should("be.visible").click();
 
-    //Click on Dragabble
+    // Click on the "Draggable" option to open the draggable page
     dragg.elements.dragabble_label().click();
   });
 
-  it("TC 01 - Verify Dragabble UI", function () {
-    //Assertion to check Header
-    textbox.elements.header_label().should("have.text", "Dragabble");
+  it("Verify Draggable UI", () => {
+    // Assertion to check the header label
+    textbox.elements.header_label().should("have.text", "Draggable");
 
-    //Assert to check all tab labels
+    // Assert all tab labels are visible
     dragg.elements.simple_tab().should("be.visible").and("have.text", "Simple");
     dragg.elements
       .axis_restrict_tab()
@@ -2807,32 +2579,32 @@ describe("Demo QA -> Dragabble", () => {
       .should("be.visible")
       .and("have.text", "Cursor Style");
 
-    //Assert Drag box
+    // Assert the drag box is visible with the correct text
     dragg.elements.dragbox().should("be.visible").and("have.text", "Drag me");
   });
 
-  it("TC 02 - Verify Simple Dragabble functionality", function () {
-    cy.wait(2000);
+  it("Verify Simple Draggable functionality", () => {
+    cy.wait(2000); // Wait for elements to settle
 
-    //Get the initial position of the draggable element
+    // Get the initial position of the draggable element
     dragg.elements.dragbox().then((initial) => {
       const initial_pos = initial.position();
 
-      //Print in log the initial position of drag box
+      // Print in log the initial position of drag box
       cy.log("Initial Position:", initial_pos);
 
-      //Variable to store new position
+      // Variables to store movement values
       const left_move = 300;
       const top_move = 475;
 
-      //Drag the dragabble element.
+      // Drag the draggable element
       dragg.elements
         .dragbox()
         .move({ deltaX: left_move, deltaY: top_move, force: true });
 
-      cy.wait(2000);
+      cy.wait(2000); // Wait for the drag action to complete
 
-      //Assert that dropbox is moved by the same values of left and top
+      // Assert that the box is moved by the same values of left and top
       dragg.elements.dragbox().then((final) => {
         const final_pos = final.position();
         cy.log("Final Position", final_pos);
@@ -2840,59 +2612,32 @@ describe("Demo QA -> Dragabble", () => {
         expect(final_pos.top).to.deep.equal(initial_pos.top + top_move);
       });
     });
-
-    // //Get the initial position of the draggable element
-    // dragg.elements.dragbox().then(box_ipos => {
-    //     const initial_pos = box_ipos.position();
-    //     cy.log('Initial Position:', initial_pos);
-
-    //     //Calculate the new coordinates
-    //     const newX = initial_pos.left + 200;
-    //     const newY = initial_pos.top + 100;
-
-    //     //Drag and move the dragbox
-    //     dragg.elements.dragbox().click() //to set focus on it
-    //         .trigger('mousedown', { which: 1, pageX: initial_pos.left, pageY: initial_pos.top })
-    //         .trigger('mousemove', { clientX: newX, clientY: newY })
-    //         .trigger('mouseup', { force: true });
-
-    //     cy.wait(2000);
-
-    //     //Assert that the dragbox is moved to a new position
-    //     dragg.elements.dragbox().then(box_fpos => {
-    //         const final_pos = box_fpos.position();
-    //         expect(final_pos).not.to.deep.equal(initial_pos);
-    //         cy.log('Final Position:', final_pos);
-    //         //expect(final_pos.left).to.equal(newX);    //top is variable as scrollable event affects its position
-    //         //expect(final_pos.top).to.equal(newY);     //left is restricted to 566
-    //     })
-    // })
   });
 
-  it("TC 03 - Verify X - Axis restricted Dragabble functionality", function () {
-    //Switch Tabs
+  it("Verify X-Axis Restricted Draggable functionality", () => {
+    // Switch to the "Axis Restricted" tab
     dragg.elements.axis_restrict_tab().click();
-    cy.wait(2000);
+    cy.wait(2000); // Wait for tab switch
 
-    //Get the initial position of the draggable element
+    // Get the initial position of the X-axis restricted draggable element
     dragg.elements.x_restrictbox().then((initial) => {
       const initial_pos = initial.position();
 
-      //Print in log the initial position of drag box
+      // Print in log the initial position of drag box
       cy.log("Initial Position:", initial_pos);
 
-      //Variable to store new position
+      // Variables to store movement values
       const left_move = 450;
       const top_move = 500;
 
-      //Drag the dragabble element.
+      // Drag the X-axis restricted element
       dragg.elements
         .x_restrictbox()
         .move({ deltaX: left_move, deltaY: top_move, force: true });
 
-      cy.wait(2000);
+      cy.wait(2000); // Wait for the drag action to complete
 
-      //Assert that dropbox is moved by the same values of left and top
+      // Assert that the element moved horizontally but not vertically
       dragg.elements.x_restrictbox().then((final) => {
         const final_pos = final.position();
         cy.log("Final Position", final_pos);
@@ -2902,30 +2647,30 @@ describe("Demo QA -> Dragabble", () => {
     });
   });
 
-  it("TC 04 - Verify Y - Axis restricted Dragabble functionality", function () {
-    //Switch Tabs
+  it("Verify Y-Axis Restricted Draggable functionality", () => {
+    // Switch to the "Axis Restricted" tab
     dragg.elements.axis_restrict_tab().click();
-    cy.wait(2000);
+    cy.wait(2000); // Wait for tab switch
 
-    //Get the initial position of the draggable element
+    // Get the initial position of the Y-axis restricted draggable element
     dragg.elements.y_restrictbox().then((initial) => {
       const initial_pos = initial.position();
 
-      //Print in log the initial position of drag box
+      // Print in log the initial position of drag box
       cy.log("Initial Position:", initial_pos);
 
-      //Variable to store new position
+      // Variables to store movement values
       const left_move = 911;
       const top_move = 365;
 
-      //Drag the dragabble element.
+      // Drag the Y-axis restricted element
       dragg.elements
         .y_restrictbox()
         .move({ deltaX: left_move, deltaY: top_move, force: true });
 
-      cy.wait(2000);
+      cy.wait(2000); // Wait for the drag action to complete
 
-      //Assert that dropbox is moved by the same values of left and top
+      // Assert that the element moved vertically but not horizontally
       dragg.elements.y_restrictbox().then((final) => {
         const final_pos = final.position();
         cy.log("Final Position", final_pos);
@@ -2935,12 +2680,12 @@ describe("Demo QA -> Dragabble", () => {
     });
   });
 
-  it("TC 05 - Verify Container Restricted Dragabble functionality", function () {
-    //Switch Tabs
+  it("Verify Container Restricted Draggable functionality", () => {
+    // Switch to the "Container Restricted" tab
     dragg.elements.container_restrict_tab().click();
-    cy.wait(2000);
+    cy.wait(2000); // Wait for tab switch
 
-    //Get the parent box values
+    // Get the parent box values
     dragg.elements.parent_block().then((parent) => {
       const parent_box = parent[0].getBoundingClientRect();
 
@@ -2949,7 +2694,7 @@ describe("Demo QA -> Dragabble", () => {
       cy.log("Parent Values left:", parent_box.left);
       cy.log("Parent Values right:", parent_box.right);
 
-      //Get the drag box initial values
+      // Get the drag box initial values
       dragg.elements.dragbox_restrict().then((child) => {
         const drag_box_initial = child[0].getBoundingClientRect();
 
@@ -2958,102 +2703,80 @@ describe("Demo QA -> Dragabble", () => {
         cy.log("Child Values left:", drag_box_initial.left);
         cy.log("Child Values right:", drag_box_initial.right);
 
-        //Assert that initially dragbox is inside parent
-        expect(parent_box.top).to.be.deep.lessThan(drag_box_initial.top);
-        expect(parent_box.left).to.be.deep.lessThan(drag_box_initial.left);
-        expect(drag_box_initial.right).to.be.deep.lessThan(parent_box.right);
-        expect(drag_box_initial.bottom).to.be.deep.lessThan(parent_box.bottom);
+        // Assert that initially dragbox is inside parent
+        expect(parent_box.top).to.be.lessThan(drag_box_initial.top);
+        expect(parent_box.left).to.be.lessThan(drag_box_initial.left);
+        expect(drag_box_initial.right).to.be.lessThan(parent_box.right);
+        expect(drag_box_initial.bottom).to.be.lessThan(parent_box.bottom);
 
-        //Drag the box to the maximum position
+        // Drag the box to the maximum position
         dragg.elements
           .dragbox_restrict()
           .move({ deltaX: 9999, deltaY: 9999, force: true });
 
-        cy.wait(2000);
+        cy.wait(2000); // Wait for the drag action to complete
 
-        //Get the values after dragbox is moved to the maximum position
+        // Get the values after dragbox is moved to the maximum position
         dragg.elements.dragbox_restrict().then((final) => {
           const drag_box_final = final[0].getBoundingClientRect();
 
-          //Assert that final dragbox position is still inside parent
-          expect(parent_box.top).to.be.deep.lessThan(drag_box_final.top);
-          expect(parent_box.left).to.be.deep.lessThan(drag_box_final.left);
-          expect(drag_box_final.right).to.be.deep.lessThan(parent_box.right);
-          expect(drag_box_final.bottom).to.be.deep.lessThan(parent_box.bottom);
+          // Assert that final dragbox position is still inside parent
+          expect(parent_box.top).to.be.lessThan(drag_box_final.top);
+          expect(parent_box.left).to.be.lessThan(drag_box_final.left);
+          expect(drag_box_final.right).to.be.lessThan(parent_box.right);
+          expect(drag_box_final.bottom).to.be.lessThan(parent_box.bottom);
         });
       });
     });
   });
 
-  it("TC 06 - Verify Text Restricted Dragabble functionality", function () {
-    //Switch Tabs
+  it("Verify Text Restricted Draggable functionality", () => {
+    // Switch to the "Container Restricted" tab
     dragg.elements.container_restrict_tab().click();
-    cy.wait(2000);
+    cy.wait(2000); // Wait for tab switch
 
-    //Get the parent box values
+    // Get the parent box values
     dragg.elements.text_restrict_parent().then((parent) => {
       const parent_box = parent[0].getBoundingClientRect();
 
-      //Get the text initial values
+      // Get the text box initial values
       dragg.elements.text_restrict().then((child) => {
         const text_box_initial = child[0].getBoundingClientRect();
 
-        //Assert that initially text is inside parent
-        expect(parent_box.top).to.be.deep.lessThan(text_box_initial.top);
-        expect(parent_box.left).to.be.deep.lessThan(text_box_initial.left);
-        expect(text_box_initial.right).to.be.deep.lessThan(parent_box.right);
-        expect(text_box_initial.bottom).to.be.deep.lessThan(parent_box.bottom);
+        // Assert that initially text is inside parent
+        expect(parent_box.top).to.be.lessThan(text_box_initial.top);
+        expect(parent_box.left).to.be.lessThan(text_box_initial.left);
+        expect(text_box_initial.right).to.be.lessThan(parent_box.right);
+        expect(text_box_initial.bottom).to.be.lessThan(parent_box.bottom);
 
-        //Drag the text to the maximum position
+        // Drag the text to the maximum position
         dragg.elements
           .text_restrict()
           .move({ deltaX: 9999, deltaY: 9999, force: true });
 
-        cy.wait(2000);
+        cy.wait(2000); // Wait for the drag action to complete
 
-        //Get the values after text is moved to the maximum position
+        // Get the values after text is moved to the maximum position
         dragg.elements.text_restrict().then((final) => {
           const text_box_final = final[0].getBoundingClientRect();
 
-          //Assert that final text position is still inside parent
-          expect(parent_box.top).to.be.deep.lessThan(text_box_final.top);
-          expect(parent_box.left).to.be.deep.lessThan(text_box_final.left);
-          expect(text_box_final.right).to.be.deep.lessThan(parent_box.right);
-          expect(text_box_final.bottom).to.be.deep.lessThan(parent_box.bottom);
+          // Assert that final text position is still inside parent
+          expect(parent_box.top).to.be.lessThan(text_box_final.top);
+          expect(parent_box.left).to.be.lessThan(text_box_final.left);
+          expect(text_box_final.right).to.be.lessThan(parent_box.right);
+          expect(text_box_final.bottom).to.be.lessThan(parent_box.bottom);
         });
       });
     });
   });
 
-  it("TC 07 - Verify Cursor Style Dragabble functionality", function () {
-    //Switch Tabs
+  it("Verify Cursor Style Draggable functionality", () => {
+    // Switch to the "Cursor Style" tab
     dragg.elements.cursor_style_tab().click();
 
-    //     cy.wait(2000);
-    //     // Store initial cursor style
-    //     let initialCursorStyle
+    cy.wait(1000); // Wait for tab switch
 
-    //     // Get the draggable element and store its initial cursor style
-    //     dragg.elements.topleft_cursor().should('have.css', 'cursor').then(cursorStyle => {
-    //         initialCursorStyle = cursorStyle
-    //     })
-
-    //     // Drag the draggable element
-    //     dragg.elements.topleft_cursor().trigger('mousedown', { which: 1 ,pageX: 0, pageY: 0})
-    //         .trigger('mousemove', { clientX: 500, clientY: 600 }).then(() => {
-    //         //.trigger('mouseup', { force: true })
-
-    //     cy.wait(2000);
-
-    //     // Verify cursor style change after drag
-    //     dragg.elements.topleft_cursor().should('have.css', 'cursor').then(newCursorStyle => {
-    //         expect(newCursorStyle).not.to.equal(initialCursorStyle)
-    //     })
-    // })
-
-    cy.wait(1000);
-
-    //Move the second box
+    // Move the top-left cursor styled box
     dragg.elements
       .topleft_cursor()
       .move({ deltaX: 380, deltaY: -60, force: true })
@@ -3064,9 +2787,9 @@ describe("Demo QA -> Dragabble", () => {
         expect(cursorStyle).to.equal("move");
       });
 
-    cy.wait(1000);
+    cy.wait(1000); // Wait before the next action
 
-    //Move the third box
+    // Move the bottom cursor styled box
     dragg.elements
       .bottom_cursor()
       .move({ deltaX: 380, deltaY: 40, force: true })
@@ -3079,45 +2802,38 @@ describe("Demo QA -> Dragabble", () => {
   });
 });
 
-/////////////////////////////////////////////////////////////////////////////////////////////////////////////
+/////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-describe("Demo QA -> Book Store Application (Register)", () => {
+// Describing the test suite for Register functionality
+describe("Book Store Application -> Register Functionality", () => {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Book Store Application section
+    // Click on the "Book Store Application" section to navigate to the Book Store page
     login.elements
       .bookstore_label()
       .scrollIntoView()
       .should("be.visible")
       .click();
 
-    //Click on Login
+    // Click on "Login" to proceed to the login page
     login.elements.login_label().click();
 
-    //Click on New User button
+    // Click on "New User" to navigate to the registration page
     login.elements.newuser_btn().click();
   });
 
-  it("TC 01 - Verify Book Store Application Register Page UI", function () {
-    //Assertion to check Header
+  it("Verify Book Store Application Register Page UI", () => {
+    // Assertion to check the header label text
     textbox.elements.header_label().should("have.text", "Register");
 
-    //Assert login form contains welcome text
+    // Assert that the registration form contains the welcome text
     register.elements
       .register_form()
       .should("contain", "Register to Book Store");
 
-    //Assert that all labels are visible
+    // Assert that all labels are visible and contain the correct text
     register.elements
-      .firtname_label()
+      .firstname_label()
       .should("be.visible")
       .and("contain", "First Name");
     register.elements
@@ -3133,49 +2849,48 @@ describe("Demo QA -> Book Store Application (Register)", () => {
       .should("be.visible")
       .and("contain", "Password");
 
-    //Assert on all input texfields
+    // Assert that all input text fields are visible
     register.elements.firstname().should("be.visible");
     register.elements.lastname().should("be.visible");
     register.elements.username().should("be.visible");
     register.elements.password().should("be.visible");
 
-    //Assert on register button
+    // Assert that the "Register" button is visible and enabled
     register.elements.register_btn().should("be.visible").and("be.enabled");
 
-    //Assert on back to login button
+    // Assert that the "Back to Login" button is visible and enabled
     register.elements.backtologin_btn().should("be.visible").and("be.enabled");
 
-    //Assert captcha is visible
+    // Assert that the captcha element is visible
     register.elements.captcha().should("be.visible");
   });
 
-  it("TC 02 - Verify Book Store Application Register Functionality", function () {
-    //Intercept URL request made for 'Created' account
+  it("Verify Book Store Application Register Functionality", () => {
+    // Intercept the API request for creating a new user and alias it for later use
     cy.intercept({
       method: "POST",
       url: "https://demoqa.com/Account/v1/User",
-    }).as("api_response_details"); //as is used to pass an alias name. which stores the reponse of API call
+    }).as("api_response_details");
 
-    //Intercept when windows generate an alert message
+    // Intercept the window alert and assert its message
     cy.on("window:alert", (message) => {
-      // Assert on the alert message
       expect(message).to.equal("User Register Successfully.");
     });
 
-    //Enter user details
+    // Enter user details into the registration form
     register.elements.firstname().type("Avi");
     register.elements.lastname().type("Singh");
     register.elements.username().type("avinh@1234");
     register.elements.password().type("Avinabh@1234");
 
-    //Verify the captcha box manually
+    // Pause to manually handle captcha verification
     cy.pause();
-    //Click on Resume button manually after this
+    // Click on Resume button manually after completing the captcha verification
 
-    //Click on Register button
+    // Click on the "Register" button to submit the registration form
     register.elements.register_btn().click();
 
-    //Wait for the intercepted request and perform assertions using alias name
+    // Wait for the intercepted request to complete and perform assertions on the response
     cy.wait("@api_response_details", { timeout: 10000 }).then(
       (interception) => {
         expect(interception.response.statusCode).to.equal(201);
@@ -3184,36 +2899,36 @@ describe("Demo QA -> Book Store Application (Register)", () => {
     );
   });
 
-  it('TC 03 - Verify validation message for blank input in "Register" page', function () {
-    //Click on Register button
+  it('Verify validation message for blank input in "Register" page', () => {
+    // Click on the "Register" button without entering any details
     register.elements.register_btn().click();
 
-    //Assert validation message is visible
+    // Assert that validation messages are visible for all required fields
     register.elements.invalid_input().should("be.visible");
-    register.elements.invalid_input().should("have.length", 4); //ensures that there are four objects with the specified class.
+    register.elements.invalid_input().should("have.length", 4); // Ensures there are four validation messages
   });
 
-  it("TC 04 - Verify validation message for already registered user", function () {
-    //Intercept URL request made for 'User Exists'
+  it("Verify validation message for already registered user", () => {
+    // Intercept the API request for creating a new user and alias it for later use
     cy.intercept({
       method: "POST",
       url: "https://demoqa.com/Account/v1/User",
     }).as("api_response_details");
 
-    //Enter user details
+    // Enter user details into the registration form
     register.elements.firstname().type("Avi");
     register.elements.lastname().type("Singh");
     register.elements.username().type("avinabh@1234");
     register.elements.password().type("Avinabh@1234");
 
-    //Verify the captcha box manually
+    // Pause to manually handle captcha verification
     cy.pause();
-    //Click on Resume button manually after this
+    // Click on Resume button manually after completing the captcha verification
 
-    //Click on Register button
+    // Click on the "Register" button to submit the registration form
     register.elements.register_btn().click();
 
-    //Wait for the intercepted request and perform assertions using alias name
+    // Wait for the intercepted request to complete and perform assertions on the response
     cy.wait("@api_response_details", { timeout: 10000 }).then(
       (interception) => {
         expect(interception.response.statusCode).to.equal(406);
@@ -3221,36 +2936,36 @@ describe("Demo QA -> Book Store Application (Register)", () => {
       }
     );
 
-    //Assert validation message is displayed
+    // Assert that validation message for existing user is displayed
     register.elements
       .validationmsg()
       .should("be.visible")
       .and("have.text", "User exists!");
   });
 
-  it("TC 05 - Verify validation message for invalid input in password field", function () {
-    //Intercept URL request made for 'Invalid password'
+  it("Verify validation message for invalid input in password field", () => {
+    // Intercept the API request for creating a new user and alias it for later use
     cy.intercept({
       method: "POST",
       url: "https://demoqa.com/Account/v1/User",
     }).as("api_response_details");
 
-    //Enter user details
+    // Enter user details into the registration form
     register.elements.firstname().type("Avi");
     register.elements.lastname().type("Singh");
     register.elements.username().type("avinabh@1234");
 
-    //Enter invalid password
+    // Enter an invalid password
     register.elements.password().type("123");
 
-    //Verify the captcha box manually
+    // Pause to manually handle captcha verification
     cy.pause();
-    //Click on Resume button manually after this
+    // Click on Resume button manually after completing the captcha verification
 
-    //Click on Register button
+    // Click on the "Register" button to submit the registration form
     register.elements.register_btn().click();
 
-    //Wait for the intercepted request and perform assertions using alias name
+    // Wait for the intercepted request to complete and perform assertions on the response
     cy.wait("@api_response_details", { timeout: 10000 }).then(
       (interception) => {
         expect(interception.response.statusCode).to.equal(400);
@@ -3258,7 +2973,7 @@ describe("Demo QA -> Book Store Application (Register)", () => {
       }
     );
 
-    //Assert validation message is displayed
+    // Assert that validation message for invalid password is displayed
     register.elements
       .validationmsg()
       .should("be.visible")
@@ -3268,62 +2983,55 @@ describe("Demo QA -> Book Store Application (Register)", () => {
       );
   });
 
-  it("TC 06 - Verify validation message for blank input in captcha verification", function () {
-    //Enter user details
+  it("Verify validation message for blank input in captcha verification", () => {
+    // Enter user details into the registration form
     register.elements.firstname().type("Avi");
     register.elements.lastname().type("Singh");
     register.elements.username().type("avinabh@1234");
     register.elements.password().type("1234@Avinabh");
 
-    //Click on Register button
+    // Click on the "Register" button without completing captcha verification
     register.elements.register_btn().click();
 
-    //Assert validation message is displayed
+    // Assert that validation message for captcha verification is displayed
     register.elements
       .validationmsg()
       .should("be.visible")
       .and("have.text", "Please verify reCaptcha to register!");
   });
 
-  it("TC 07 - Verify Back to Login functionality in Register Page", function () {
-    //Click on Back to login button
+  it("Verify Back to Login functionality in Register Page", () => {
+    // Click on the "Back to Login" button to navigate back to the login page
     register.elements.backtologin_btn().click();
 
-    //Assertion to check Header
+    // Assertion to check the header label text on the login page
     textbox.elements.header_label().should("have.text", "Login");
   });
 });
 
-describe("Demo QA -> Book Store Application (Login)", () => {
+// Describing the test suite for Login functionality
+describe("Book Store Application -> Login Functionality", function () {
+  // Hook to run before each test in this suite
   beforeEach(function () {
-    //call to ignore_ad function
-    functions.ignore_ad();
-
-    //Set screen size
-    cy.viewport(1920, 1080);
-
-    //Visit the demoQA website
-    cy.visit("https://demoqa.com/");
-
-    //Click on Book Store Application section
+    // Click on the "Book Store Application" section to navigate to the Book Store page
     login.elements
       .bookstore_label()
       .scrollIntoView()
       .should("be.visible")
       .click();
 
-    //Click on Login
+    // Click on "Login" to navigate to the login page
     login.elements.login_label().click();
   });
 
-  it("TC 01 - Verify Book Store Application Login Page UI", function () {
-    //Assertion to check Header
+  it("Verify Book Store Application Login Page UI", () => {
+    // Assertion to check the header label text
     textbox.elements.header_label().should("have.text", "Login");
 
-    //Assert login form contains welcome text
+    // Assert that the login form contains the welcome text
     login.elements.login_form().should("contain", "Welcome");
 
-    //Assert that username and password label is visible
+    // Assert that username and password labels are visible and contain the correct text
     login.elements
       .username_label()
       .should("be.visible")
@@ -3333,26 +3041,26 @@ describe("Demo QA -> Book Store Application (Login)", () => {
       .should("be.visible")
       .and("contain", "Password");
 
-    //Assert on username and password textfield
+    // Assert that username and password input fields are visible
     login.elements.username().should("be.visible");
     login.elements.password().should("be.visible");
 
-    //Assert on login button
+    // Assert that the login button is visible and enabled
     login.elements.login_btn().should("be.visible").and("be.enabled");
 
-    //Assert on new user button
+    // Assert that the "New User" button is visible and enabled
     login.elements.newuser_btn().should("be.visible").and("be.enabled");
   });
 
-  it("TC 02 - Verify Book Store Application Login Functionality", function () {
-    //Enter valid username and password
+  it("Verify Book Store Application Login Functionality", () => {
+    // Enter valid username and password
     login.elements.username().type("Avi@1234");
     login.elements.password().type("Avi@1234");
 
-    //Click on login button
+    // Click on the login button to submit the login form
     login.elements.login_btn().click();
 
-    //Assert user is logged in successfully
+    // Assert that the user is successfully logged in by checking the profile page
     profile.elements.username_label().should("be.visible");
     profile.elements
       .username_value()
@@ -3360,12 +3068,12 @@ describe("Demo QA -> Book Store Application (Login)", () => {
       .and("have.text", "Avi@1234");
   });
 
-  it("TC 03 - Verify blank input in Login Page", function () {
-    //Click on login button
+  it("Verify blank input in Login Page", () => {
+    // Click on the login button without entering any credentials
     login.elements.login_btn().click();
 
-    //Assert validation message is visible
+    // Assert that validation messages are visible for the required fields
     register.elements.invalid_input().should("be.visible");
-    register.elements.invalid_input().should("have.length", 2); //ensures that there are four objects with the specified class.
+    register.elements.invalid_input().should("have.length", 2); // Ensures that there are two validation messages for username and password
   });
 });
