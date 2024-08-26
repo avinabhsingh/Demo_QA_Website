@@ -18,3 +18,6 @@ import './commands'
 
 // Alternatively you can use CommonJS syntax:
 // require('./commands')
+
+import 'cypress-iframe';
+import '@4tw/cypress-drag-drop';

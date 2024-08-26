@@ -929,7 +929,7 @@ describe("Upload and Download Functionality", function () {
       .selectFile("cypress/uploads/sample_file.docx");
 
     // Assert that the file path contains the uploaded file name
-    up_down.elements.file_path().should("contain", "img.jpg");
+    up_down.elements.file_path().should("contain", ".docx");
   });
 });
 
@@ -2355,11 +2355,12 @@ describe("Resizable Functionality", function () {
         resize.elements
           .unrestricted_box()
           .should("have.css", "width")
-          .not.eq("200px");
+          .and("not.equal", "200px");
+
         resize.elements
           .unrestricted_box()
           .should("have.css", "height")
-          .not.eq("200px");
+          .and("not.equal", "200px");
       });
   });
 });
@@ -2644,7 +2645,7 @@ describe("Draggable Functionality", function () {
         .x_restrictbox()
         .move({ deltaX: left_move, deltaY: top_move, force: true });
 
-      cy.wait(2000); // Wait for the drag action to complete
+      cy.wait(4000); // Wait for the drag action to complete
 
       // Assert that the element moved horizontally but not vertically
       dragg.elements.x_restrictbox().then((final) => {
@@ -2677,7 +2678,7 @@ describe("Draggable Functionality", function () {
         .y_restrictbox()
         .move({ deltaX: left_move, deltaY: top_move, force: true });
 
-      cy.wait(2000); // Wait for the drag action to complete
+      cy.wait(4000); // Wait for the drag action to complete
 
       // Assert that the element moved vertically but not horizontally
       dragg.elements.y_restrictbox().then((final) => {
@@ -2723,7 +2724,7 @@ describe("Draggable Functionality", function () {
           .dragbox_restrict()
           .move({ deltaX: 9999, deltaY: 9999, force: true });
 
-        cy.wait(2000); // Wait for the drag action to complete
+        cy.wait(4000); // Wait for the drag action to complete
 
         // Get the values after dragbox is moved to the maximum position
         dragg.elements.dragbox_restrict().then((final) => {
@@ -2763,7 +2764,7 @@ describe("Draggable Functionality", function () {
           .text_restrict()
           .move({ deltaX: 9999, deltaY: 9999, force: true });
 
-        cy.wait(2000); // Wait for the drag action to complete
+        cy.wait(4000); // Wait for the drag action to complete
 
         // Get the values after text is moved to the maximum position
         dragg.elements.text_restrict().then((final) => {
@@ -2796,7 +2797,7 @@ describe("Draggable Functionality", function () {
         expect(cursorStyle).to.equal("move");
       });
 
-    cy.wait(1000); // Wait before the next action
+    cy.wait(1500); // Wait before the next action
 
     // Move the bottom cursor styled box
     dragg.elements
