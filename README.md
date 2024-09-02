@@ -28,18 +28,18 @@ This repository contains end-to-end test automation scripts using Cypress for th
    ```sh
    cd Demo_QA_Website
    ```
-3. **Install cypress:**
+3. **Install the dependencies:**
    ```sh
-   npx cypress install
+   npx install
    ```
-   This will install Cypress.
+   This will install Cypress along with the dependencies.
 4. **Open Cypress:**
    ```sh
    npx cypress open
    ```
    This will open the Cypress Test Runner, where you can see and run all the test cases.
 5. **Additional Dependencies**
-To install specific libraries used in this project, you may need to manually install them if they are not listed in package.json:
+To install specific libraries used in this project, you may need to manually install them if error aries during installation process:
 
    1. ***Iframe Handling Library:***
       ```sh
