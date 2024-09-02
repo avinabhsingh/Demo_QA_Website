@@ -30,7 +30,7 @@ This repository contains end-to-end test automation scripts using Cypress for th
    ```
 3. **Install the dependencies:**
    ```sh
-   npx install
+   npm install
    ```
    This will install Cypress along with the dependencies.
 4. **Open Cypress:**
