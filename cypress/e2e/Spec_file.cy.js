@@ -29,9 +29,6 @@ import selectable from "../pageObjects/Interactions/Selectable";
 import resize from "../pageObjects/Interactions/Resizable";
 import dropp from "../pageObjects/Interactions/Droppable";
 import dragg from "../pageObjects/Interactions/Dragabble";
-import login from "../pageObjects/Book Store Application/Login";
-import register from "../pageObjects/Book Store Application/Register";
-import profile from "../pageObjects/Book Store Application/Profile";
 
 // Setting Cypress to not fail test cases when uncaught exceptions occur
 Cypress.on("uncaught:exception", (err, runnable) => {
@@ -47,13 +44,15 @@ beforeEach(function () {
   cy.viewport(1920, 1080);
 
   // Visit the demoQA website
-  cy.visit("https://demoqa.com/", { timeout: 120000 });
+  cy.visit("https://demoqa.com/");
 });
 
 // Describing the test suite for Text Box functionality
 describe("Text Box Functionality", function () {
+
   // Hook to run before each test in this suite
   beforeEach(function () {
+
     // Click on the ELEMENTS section to expand the menu
     textbox.elements.elements_label().should("be.visible").click();
 
@@ -69,34 +68,42 @@ describe("Text Box Functionality", function () {
 
   // Test case to verify the UI elements of the Textbox page
   it("Verify Textbox UI", () => {
-    // Verify the label of the Full Name textbox
-    textbox.elements.full_name_label().should("have.text", "Full Name");
 
-    // Verify the label of the Email textbox
-    textbox.elements.email_label().should("have.text", "Email");
+    const labels = {
+      full_name_label: "Full Name",
+      email_label: "Email",
+      current_add_label: "Current Address",
+      permanent_add_label: "Permanent Address",
+    };
 
-    // Verify the label of the Current Address textbox
-    textbox.elements.current_add_label().should("have.text", "Current Address");
-
-    // Verify the label of the Permanent Address textbox
-    textbox.elements
-      .permanent_add_label()
-      .should("have.text", "Permanent Address");
+    Object.entries(labels).forEach(([element, text]) => {
+      textbox.elements[element]().should("have.text", text);
+    });
   });
 
   // Test case to verify the functionality of the Text Box
   it("Verify Text Box Functionality", () => {
-    // Store data to be entered inside variables
-    const name = "Avi";
-    const email = "Avi@gmail.com";
-    const cur_add = "Sikkim";
-    const per_add = "Mumbai";
 
-    // Type the data into the respective text fields
-    textbox.elements.full_name().type(name);
-    textbox.elements.email().type(email);
-    textbox.elements.current_add().type(cur_add);
-    textbox.elements.permanent_add().type(per_add);
+    // Data to be entered
+    const data = {
+      name: "Test",
+      email: "test@gmail.com",
+      currentAddress: "Sikkim",
+      permanentAddress: "Mumbai",
+    };
+
+    // Map the input fields to their respective elements
+    const fields = {
+      full_name: data.name,
+      email: data.email,
+      current_add: data.currentAddress,
+      permanent_add: data.permanentAddress,
+    };
+
+    // Fill the input fields with data
+    Object.entries(fields).forEach(([field, value]) => {
+      textbox.elements[field]().type(value);
+    });
 
     // Click on the submit button
     textbox.elements.submit_btn().should("be.visible").click();
@@ -108,17 +115,19 @@ describe("Text Box Functionality", function () {
     cy.wait(2000);
 
     // Assert that the result dialog contains the correct data entered
-    textbox.elements.result_name().should("contain.text", name);
-    textbox.elements.result_email().should("contain.text", email);
-    textbox.elements.result_curr_add().should("contain.text", cur_add);
-    textbox.elements.result_perm_add().should("contain.text", per_add);
+    textbox.elements.result_name().should("contain.text", data.name);
+    textbox.elements.result_email().should("contain.text", data.email);
+    textbox.elements.result_curr_add().should("contain.text", data.currentAddress);
+    textbox.elements.result_perm_add().should("contain.text", data.permanentAddress);
   });
 });
 
 // Describing the test suite for Check Box functionality
 describe("Check Box Functionality", function () {
+
   // Hook to run before each test in this suite
   beforeEach(function () {
+
     // Click on the ELEMENTS section to expand the menu
     textbox.elements.elements_label().should("be.visible").click();
 
@@ -128,6 +137,7 @@ describe("Check Box Functionality", function () {
 
   // Test case to verify the functionality of selecting all checkboxes
   it("Verify checking all the checkboxes", () => {
+
     // Click on the "Expand All" button to reveal all checkboxes
     checkbox.elements.expand().click();
 
@@ -137,13 +147,14 @@ describe("Check Box Functionality", function () {
     // Iterate over all checkboxes and click each one, except those in the `noclick` list
     checkbox.elements.all_boxes().each(($element, index) => {
       if (!noclick.includes(index)) {
-        cy.wrap($element).click(); // Wrap the DOM element to perform actions or assertions on it
+        cy.wrap($element).click();
       }
     });
   });
 
   // Test case to verify the functionality of the "Home" checkbox
   it("Verify 'Home' Checkbox functionality", () => {
+
     // Click on the "Home" checkbox with force to ensure the click occurs even if the element is hidden or overlapped
     checkbox.elements.home_box().check({ force: true });
 
@@ -165,6 +176,7 @@ describe("Check Box Functionality", function () {
 
   // Test case to verify the functionality of clicking on dropdowns and checking specific checkboxes
   it("Verify click on all dropdowns & check checkboxes", () => {
+
     // Click on the first dropdown icon to expand the parent checkbox list
     checkbox.elements.dropdown_icon().eq(0).click();
 
@@ -183,6 +195,7 @@ describe("Check Box Functionality", function () {
 
   // Test case to verify the functionality of expanding and collapsing all dropdowns
   it("Verify Expand all & collapse dropdowns", () => {
+
     // Click on the "+" (expand all) icon to expand all dropdowns
     checkbox.elements.expand().click();
 
@@ -200,6 +213,7 @@ describe("Check Box Functionality", function () {
 
 // Describing the test suite for Radio Button functionality
 describe("Radio Button Functionality", function () {
+
   // Hook to run before each test in this suite
   beforeEach(function () {
     // Click on the ELEMENTS section
@@ -210,11 +224,9 @@ describe("Radio Button Functionality", function () {
   });
 
   it("Verify Radio button UI", () => {
+
     // Assertion to check the Header visibility and text
-    textbox.elements
-      .header_label()
-      .should("be.visible")
-      .and("have.text", "Radio Button");
+    textbox.elements.header_label().should("be.visible").and("have.text", "Radio Button");
 
     // Assertion to check the visibility of clickable options
     radiobutton.elements.enabled_option().should("be.visible");
@@ -224,6 +236,7 @@ describe("Radio Button Functionality", function () {
   });
 
   it("Verify clicking on all radio buttons", () => {
+
     // Assertion to ensure no result exists initially
     radiobutton.elements.result().should("not.exist");
 
@@ -243,10 +256,7 @@ describe("Radio Button Functionality", function () {
     radiobutton.elements.impressive().should("be.checked");
 
     // Verify result contains "Impressive"
-    radiobutton.elements
-      .result()
-      .should("be.visible")
-      .and("contain", "Impressive");
+    radiobutton.elements.result().should("be.visible").and("contain", "Impressive");
 
     // Click on non-Clickable option "NO" forcefully (though it may not work)
     radiobutton.elements.no().click({ force: true });
@@ -255,6 +265,7 @@ describe("Radio Button Functionality", function () {
 
 // Describing the test suite for Web Tables functionality
 describe("Web Tables Functionality", function () {
+
   // Describing the test suite for Text Box functionality
   beforeEach(function () {
     // Click on the ELEMENTS section
@@ -265,11 +276,9 @@ describe("Web Tables Functionality", function () {
   });
 
   it("Verify Web Tables UI", () => {
+
     // Assertion to check the Header visibility and text
-    textbox.elements
-      .header_label()
-      .should("be.visible")
-      .and("have.text", "Web Tables");
+    textbox.elements.header_label().should("be.visible").and("have.text", "Web Tables");
 
     // Assertion to check the visibility and enabled state of the add record button
     webtables.elements.addrecord_btn().should("be.visible").and("be.enabled");
@@ -290,10 +299,7 @@ describe("Web Tables Functionality", function () {
 
     // Assertion to check if each column header matches expected text
     webtables.elements.col_headers().each(($element, index) => {
-      cy.wrap($element).should(
-        "have.text",
-        column_names[index] || "Test case failed"
-      );
+      cy.wrap($element).should("have.text", column_names[index] || "Test case failed");
     });
 
     // Assertion to check the visibility of pagination controls
@@ -301,14 +307,12 @@ describe("Web Tables Functionality", function () {
   });
 
   it("Verify adding records in a table", () => {
+
     // Click on the add record button
     webtables.elements.addrecord_btn().click();
 
     // Assertion to check the Registration Form header visibility and text
-    webtables.elements
-      .form_header()
-      .should("be.visible")
-      .and("have.text", "Registration Form");
+    webtables.elements.form_header().should("be.visible").and("have.text", "Registration Form");
 
     // List to store field labels
     const label_names = [
@@ -322,35 +326,40 @@ describe("Web Tables Functionality", function () {
 
     // Assertion to check if each field label matches expected text
     webtables.elements.form_fields().each(($element, index) => {
-      cy.wrap($element).should(
-        "have.text",
-        label_names[index] || "Test case failed"
-      );
+      cy.wrap($element).should("have.text", label_names[index]);
     });
 
     // Assertion to check the visibility and enabled state of the submit button
     webtables.elements.submit_btn().should("be.visible").and("be.enabled");
 
-    // Enter details in the form fields
-    webtables.elements.firstname().type("Avinabh");
-    webtables.elements.lastname().type("Singh");
-    webtables.elements.age().type("25");
-    webtables.elements.email().type("Avi@gmail.com");
-    webtables.elements.salary().type("9999999");
-    webtables.elements.dept().type("IT");
+    // Form data to be entered
+    const formData = {
+      firstname: "Test",
+      lastname: "Data",
+      age: "25",
+      email: "test@gmail.com",
+      salary: "9999999",
+      dept: "IT",
+    };
+
+    // Enter data in the form fields
+    Object.entries(formData).forEach(([field, value]) => {
+      webtables.elements[field]().type(value);
+    });
 
     // Click on the submit button
     webtables.elements.submit_btn().click();
 
     // Assertion to verify that the new record is present in the table
-    webtables.elements.table_rows().each(($element, index) => {
-      if (index == 3) {
-        cy.wrap($element).should("contain", "Avinabh");
-      }
+    webtables.elements.table_rows().eq(3).within(() => {
+      Object.values(formData).forEach((value) => {
+        cy.contains(value).should("exist");
+      })
     });
   });
 
   it("Verify Register dialog for blank inputs", () => {
+
     // Click on the add record button
     webtables.elements.addrecord_btn().click();
 
@@ -362,6 +371,7 @@ describe("Web Tables Functionality", function () {
   });
 
   it("Verify adding values after validation", () => {
+
     // Click on the add record button
     webtables.elements.addrecord_btn().click();
 
@@ -371,47 +381,28 @@ describe("Web Tables Functionality", function () {
     // Assertion to check if the form is validated (class changes to 'was-validated')
     webtables.elements.register_form().should("have.class", "was-validated");
 
-    // Enter and verify that the first name field is filled
-    webtables.elements.firstname().should("have.attr", "value", "");
-    webtables.elements.firstname().type("Avinabh");
-    webtables.elements
-      .firstname()
-      .should("have.attr", "value")
-      .and("not.be.empty");
+    // Form data to be entered
+    const formData = {
+      firstname: "Test",
+      lastname: "data",
+      age: 34,
+      email: "test@gmail.com",
+      salary: 354784,
+      dept: "ECE",
+    };
 
-    // Enter and verify that the last name field is filled
-    webtables.elements.lastname().should("have.attr", "value", "");
-    webtables.elements.lastname().type("Singh");
-    webtables.elements
-      .lastname()
-      .should("have.attr", "value")
-      .and("not.be.empty");
-
-    // Enter and verify that the age field is filled
-    webtables.elements.age().should("have.attr", "value", "");
-    webtables.elements.age().type(34);
-    webtables.elements.age().should("have.attr", "value").and("not.be.empty");
-
-    // Enter and verify that the email field is filled
-    webtables.elements.email().should("have.attr", "value", "");
-    webtables.elements.email().type("Avi@gmail.com");
-    webtables.elements.email().should("have.attr", "value").and("not.be.empty");
-
-    // Enter and verify that the salary field is filled
-    webtables.elements.salary().should("have.attr", "value", "");
-    webtables.elements.salary().type(354784);
-    webtables.elements
-      .salary()
-      .should("have.attr", "value")
-      .and("not.be.empty");
-
-    // Enter and verify that the department field is filled
-    webtables.elements.dept().should("have.attr", "value", "");
-    webtables.elements.dept().type("ECE");
-    webtables.elements.dept().should("have.attr", "value").and("not.be.empty");
+    // Loop through each form field to enter data and verify it is not empty
+    Object.entries(formData).forEach(([field, value]) => {
+      webtables.elements[field]()
+        .should("have.attr", "value", "") // Verify field is initially empty
+        .type(value) // Enter the data
+        .should("have.attr", "value") // Verify the field is now filled
+        .and("not.be.empty");
+    });
   });
 
   it("Verify validation for firstname", () => {
+
     // Click on the add record button
     webtables.elements.addrecord_btn().click();
 
@@ -438,6 +429,7 @@ describe("Web Tables Functionality", function () {
   });
 
   it("Verify Email RegEX", () => {
+
     // Click on the add record button to open the form for adding a new record
     webtables.elements.addrecord_btn().click();
 
@@ -462,6 +454,7 @@ describe("Web Tables Functionality", function () {
   });
 
   it("Verify Salary RegEX", () => {
+
     // Click on the add record button to open the form for adding a new record
     webtables.elements.addrecord_btn().click();
 
@@ -482,6 +475,7 @@ describe("Web Tables Functionality", function () {
   });
 
   it("Verify Age RegEX", () => {
+
     // Click on the add record button to open the form for adding a new record
     webtables.elements.addrecord_btn().click();
 
@@ -502,6 +496,7 @@ describe("Web Tables Functionality", function () {
   });
 
   it("Verify searchbar functionality", () => {
+
     // Declare a constant to store the search data
     const search_data = "Vega";
 
@@ -543,6 +538,7 @@ describe("Web Tables Functionality", function () {
   });
 
   it("Verify Pagination functionality", () => {
+
     // Add multiple records to the table by calling a function
     webtables.addMultiRecords();
 
@@ -566,38 +562,36 @@ describe("Web Tables Functionality", function () {
   });
 
   it("Verify editing a particular record", () => {
-    // Click on the edit icon for a specific record to open the edit form
-    webtables.elements.edit_record().click();
+
+    const recordId = 3; // Specify the record to edit
+    const updatedData = {
+      firstname: "Test",
+      lastname: "data",
+      age: "25",
+      email: "test@gmail.com",
+      salary: "9999999",
+      dept: "IT",
+    };
+
+    // Click on the edit icon for the specified record
+    webtables.elements.edit_record(recordId).click();
 
     // Assert that the register form dialog is visible
     webtables.elements.register_form().should("be.visible");
 
-    // Clear and enter new details in the first name input field
-    webtables.elements.firstname().clear().type("Avinabh");
-
-    // Clear and enter new details in the last name input field
-    webtables.elements.lastname().clear().type("Singh");
-
-    // Clear and enter new details in the age input field
-    webtables.elements.age().clear().type("25");
-
-    // Clear and enter new details in the email input field
-    webtables.elements.email().clear().type("Avi@gmail.com");
-
-    // Clear and enter new details in the salary input field
-    webtables.elements.salary().clear().type("9999999");
-
-    // Clear and enter new details in the department input field
-    webtables.elements.dept().clear().type("IT");
+    // Iterate through the updated data and update each field dynamically
+    Object.entries(updatedData).forEach(([field, value]) => {
+      webtables.elements[field]().clear().type(value);
+    });
 
     // Click on the submit button to save the edited record
     webtables.elements.submit_btn().click();
 
-    // Assertion to check that the edited value is displayed in the table
-    webtables.elements.table_rows().each(($element, index) => {
-      if (index == 2) {
-        cy.wrap($element).should("contain", "Avinabh");
-      }
+    // Assertion to check that the edited value is displayed in the correct row of the table
+    webtables.elements.table_rows().eq(recordId - 1).within(() => {
+      Object.values(updatedData).forEach((value) => {
+        cy.contains(value).should("exist");
+      });
     });
   });
 
@@ -612,6 +606,7 @@ describe("Web Tables Functionality", function () {
 
 // Describing the test suite for Button functionality
 describe("Buttons Functionality", function () {
+
   // Hook to run before each test in this suite
   beforeEach(function () {
     // Click on the ELEMENTS section in the sidebar
@@ -621,10 +616,7 @@ describe("Buttons Functionality", function () {
     button.elements.button_label().should("be.visible").click();
 
     // Assert that the header label is visible and contains the text "Buttons"
-    textbox.elements
-      .header_label()
-      .should("be.visible")
-      .and("contain", "Buttons");
+    textbox.elements.header_label().should("be.visible").and("contain", "Buttons");
   });
 
   it("Verify double click functionality", () => {
@@ -654,6 +646,7 @@ describe("Buttons Functionality", function () {
 
 // Describing the test suite for Links functionality
 describe("Links Functionality", function () {
+
   // Hook to run before each test in this suite
   beforeEach(function () {
     // Click on the ELEMENTS section in the sidebar
@@ -665,10 +658,7 @@ describe("Links Functionality", function () {
 
   it("Verify user is redirected by passing assertion on HTML attributes", () => {
     // Assert that the header label is visible and contains the text "Links"
-    textbox.elements
-      .header_label()
-      .should("be.visible")
-      .and("contain", "Links");
+    textbox.elements.header_label().should("be.visible").and("contain", "Links");
 
     // Click on the first HOME link, which opens in a new tab (target="_blank")
     links.elements.home_link1().should("have.attr", "target", "_blank").click();
@@ -844,6 +834,7 @@ describe("Links Functionality", function () {
 
 // Describing the test suite for Images functionality
 describe("Broken Links & Images Functionality", function () {
+
   // Hook to run before each test in this suite
   beforeEach(function () {
     // Click on the ELEMENTS section in the sidebar

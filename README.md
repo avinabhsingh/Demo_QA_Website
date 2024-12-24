@@ -58,9 +58,9 @@ To install specific libraries used in this project, you may need to manually ins
 ## Usage
 
 1.	To run the tests in headless mode (without opening the browser UI), use: 
-   ```sh
-   npx cypress run
-   ```
+```sh
+npx cypress run
+```
 
 2. To run the tests with specific browser type in headless mode, use:
    ```sh
