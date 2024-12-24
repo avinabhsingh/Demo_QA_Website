@@ -1,7 +1,6 @@
 class radiobutton {
 
     elements = {
-
         radiobutton_label: () => cy.get('.menu-list').find('li').eq(2),
         enabled_option: () => cy.get('[class="custom-control-label"]'),
         disbaled_option: () => cy.get('[class="custom-control-label disabled"]'),        
@@ -10,9 +9,6 @@ class radiobutton {
         impressive: () => cy.get('[id="impressiveRadio"]'),
         no: () => cy.get('[id="noRadio"]'),
         result: () => cy.get('[class="text-success"]'),
-
-
-
     }
 }
 

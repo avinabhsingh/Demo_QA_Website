@@ -1,4 +1,4 @@
-class webtables{
+class webtables {
 
     elements = {
         webtable_label: () => cy.get('.menu-list').find('li').eq(3),
@@ -8,11 +8,11 @@ class webtables{
         pagination: () => cy.get('[class="pagination-bottom"]'),
         table_rows: () => cy.get('[class="rt-tr-group"]'),
         pagination_dropdown: () => cy.get('select[aria-label="rows per page"]'),
-        next_btn: () => cy.contains('button[class="-btn"]','Next'),
-        previous_btn: () => cy.contains('button[class="-btn"]','Previous'),
+        next_btn: () => cy.contains('button[class="-btn"]', 'Next'),
+        previous_btn: () => cy.contains('button[class="-btn"]', 'Previous'),
         page_number: () => cy.get('input[aria-label="jump to page"]'),
         empty_table: () => cy.get('[class="rt-noData"]'),
-        edit_record: () => cy.get('[id="edit-record-3"]'),
+        edit_record: (id) => cy.get(`[id="edit-record-${id}"]`),
         delete_record: () => cy.get('[id="delete-record-1"]'),
 
         //Registration Form
@@ -27,35 +27,52 @@ class webtables{
         dept: () => cy.get('input[id="department"]'),
         submit_btn: () => cy.get('button[id="submit"]'),
         close_btn: () => cy.get('button[class="close"]'),
-        
+
 
     }
 
+    /**
+    * Adds multiple records to the table.
+    * @param {Array<Object>} recordsToAdd - An array of objects where each object represents a record to be added.
+    * Each object should contain the following properties:
+    * - firstName: {string} First name of the record
+    * - lastName: {string} Last name of the record
+    * - age: {string|number} Age of the record
+    * - email: {string} Email of the record
+    * - salary: {string|number} Salary of the record
+    * - dept: {string} Department of the record
+    */
     addMultiRecords() {
+
         const recordsToAdd = [
-            { firstName: 'Avinabh', lastName: 'Singh', age: '25', email: 'Avi@gmail.com', salary: '9999999', dept: 'IT' },
             { firstName: 'Jeet', lastName: 'B', age: '30', email: 'jeet@yahoo.com', salary: '833200', dept: 'Finance' },
             { firstName: 'Abhi', lastName: 'WEST', age: '12', email: 'asd234@tinder.com', salary: '34500', dept: 'IT' },
             { firstName: 'Renu', lastName: 'north', age: '33', email: 'qwerty123@google.in', salary: '45329', dept: 'COMM' },
-           // { firstName: 'Preet', lastName: 'south', age: '45', email: 'preety@rediffmail.com', salary: '300', dept: 'SALES' },
-           // { firstName: 'Nikhil', lastName: 'east', age: '56', email: 'nick34@fishery.co', salary: '8', dept: 'SALES' },     
+            { firstName: 'Preet', lastName: 'south', age: '45', email: 'preety@rediffmail.com', salary: '300', dept: 'SALES' },
+            // { firstName: 'Nikhil', lastName: 'east', age: '56', email: 'nick34@fishery.co', salary: '8', dept: 'SALES' },     
         ];
+
         //Click on add record button
         this.elements.addrecord_btn().click();
+
         //Loop through each record to enter details and submit
         recordsToAdd.forEach(record => {
+
             this.elements.firstname().type(record.firstName);
             this.elements.lastname().type(record.lastName);
             this.elements.age().type(record.age);
             this.elements.email().type(record.email);
             this.elements.salary().type(record.salary);
             this.elements.dept().type(record.dept);
+
             // Click on submit button
             this.elements.submit_btn().click();
+
             //Click on add record button again
             this.elements.addrecord_btn().click();
             cy.wait(1100);
         });
+
         this.elements.close_btn().click();
     }
 }
