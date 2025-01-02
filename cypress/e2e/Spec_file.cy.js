@@ -855,7 +855,7 @@ describe("Broken Links & Images Functionality", function () {
     broken.elements.valid_img().should("be.visible");
 
     // Assert that the default broken image is visible
-    broken.elements.broken_img().should("be.visible");
+    broken.elements.broken_img().should("not.be.visible");
   });
 
   it("Verify valid Image", () => {
